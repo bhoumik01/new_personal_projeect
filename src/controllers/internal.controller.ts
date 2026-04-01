@@ -49,7 +49,7 @@ export async function getCollectionReport(req: Request, res: Response, next: Nex
         const ordersWithPayments = await prisma.order.findMany({
             where: {
                 createdAt: { gte: startDate, lt: endDate },
-                payment: {OR: [{ status: PaymentStatus.SUCCESS }, { status: PaymentStatus.PENDING }]},
+                payment: {OR: [{ status: PaymentStatus.SUCCESS }]},
             },
             include: { payment: true, smmOrder: true },
         });
