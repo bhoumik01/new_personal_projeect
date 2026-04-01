@@ -17,60 +17,61 @@ export async function getCollectionReport(req: Request, res: Response, next: Nex
     try {
         const range = (req.query.range as string) || 'today';
         
-        // Calculate date range in IST (consistent with the bot logic)
         const now = new Date();
-        const istOffset = 5.5 * 60 * 60 * 1000;
-        const istNow = new Date(now.getTime() + istOffset);
 
         let startDate: Date;
         let endDate: Date;
 
         if (range === 'today') {
-            const istMidnight = new Date(istNow);
-            istMidnight.setUTCHours(0, 0, 0, 0);
-            startDate = new Date(istMidnight.getTime() - istOffset);
-            endDate = now;
-        } else if (range === 'yesterday') {
-            const istYesterday = new Date(istNow);
-            istYesterday.setUTCDate(istYesterday.getUTCDate() - 1);
-            const istYesterdayMidnight = new Date(istYesterday);
-            istYesterdayMidnight.setUTCHours(0, 0, 0, 0);
-            startDate = new Date(istYesterdayMidnight.getTime() - istOffset);
+            const start = new Date();
+            start.setHours(0, 0, 0, 0); // start of today (IST)
 
-            const istTodayMidnight = new Date(istNow);
-            istTodayMidnight.setUTCHours(0, 0, 0, 0);
-            endDate = new Date(istTodayMidnight.getTime() - istOffset);
+            startDate = new Date(start.toISOString()); // convert to UTC
+            endDate = now;
+
+        } else if (range === 'yesterday') {
+            const start = new Date();
+            start.setDate(start.getDate() - 1);
+            start.setHours(0, 0, 0, 0); // yesterday start
+
+            const end = new Date();
+            end.setHours(0, 0, 0, 0); // today start
+
+            startDate = new Date(start.toISOString());
+            endDate = new Date(end.toISOString());
+
         } else {
             res.status(400).json({ success: false, message: 'Invalid range' });
             return;
         }
 
-        // Fetch orders with successful payments
+        // ---- YOUR ORIGINAL LOGIC BELOW (UNCHANGED) ----
+
         const ordersWithPayments = await prisma.order.findMany({
             where: {
                 createdAt: { gte: startDate, lt: endDate },
-                payment: {OR: [{ status: PaymentStatus.SUCCESS }]},
+                payment: { OR: [{ status: PaymentStatus.SUCCESS }] },
             },
             include: { payment: true, smmOrder: true },
         });
 
-        // Fetch bot orders (no payment, but processing/completed)
         const botOrders = await prisma.order.findMany({
             where: {
                 createdAt: { gte: startDate, lt: endDate },
-                payment: {amount:0},
+                payment: { amount: 0 },
                 status: { in: [OrderStatus.PROCESSING, OrderStatus.COMPLETED, OrderStatus.PENDING] },
             },
-           
         });
-        const spent=await prisma.spend.aggregate({
-            where:{
-                createdAt:{gte:startDate,lt:endDate}
+
+        const spent = await prisma.spend.aggregate({
+            where: {
+                createdAt: { gte: startDate, lt: endDate }
             },
             _sum: {
                 amount: true
             }
-        })
+        });
+
         const websiteRevenue = ordersWithPayments.reduce((sum, o) => sum + (o.payment?.amount ?? 0), 0);
         const totalSpend = spent._sum.amount ?? 0;
         const netProfit = websiteRevenue - totalSpend;
