@@ -252,7 +252,7 @@ export async function getDashboardStats(_req: Request, res: Response, next: Next
                 include: { order: true },
             }),
             prisma.payment.aggregate({
-                where: { status: { not: 'FAILED' } },
+                where: { status: 'SUCCESS' },
                 _sum: { amount: true },
             }),
         ]);
