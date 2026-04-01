@@ -394,7 +394,16 @@ export async function createAdminOrder(req: Request, res: Response, next: NextFu
  */
 export async function getSpends(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
+        const date=req.query.date as string | undefined;
+        const where=date?{
+            date: {
+                equals: new Date(date)
+            }
+        }: undefined;
+
+
         const spends = await prisma.spend.findMany({
+            where,
             orderBy: { date: 'desc' },
             take: 50,
         });
