@@ -32,13 +32,7 @@ export async function getCollectionReport(req: Request, res: Response, next: Nex
         } else if (range === 'yesterday') {
             const start = new Date();
             start.setDate(start.getDate() - 1);
-            start.setHours(0, 0, 0, 0); // yesterday start
-
-            const end = new Date();
-            end.setHours(0, 0, 0, 0); // today start
-
-            startDate = new Date(start.toISOString());
-            endDate = new Date(end.toISOString());
+        
 
         } else {
             res.status(400).json({ success: false, message: 'Invalid range' });
@@ -49,7 +43,7 @@ export async function getCollectionReport(req: Request, res: Response, next: Nex
 
         const ordersWithPayments = await prisma.order.findMany({
             where: {
-                createdAt: { gte: startDate, lt: endDate },
+                createdAt: startDate,
                 payment: { OR: [{ status: PaymentStatus.SUCCESS }] },
             },
             include: { payment: true, smmOrder: true },
