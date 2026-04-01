@@ -93,7 +93,6 @@ async function main() {
             
         return spend;
     }
-    console.log(getSpends());
     process.on('SIGINT', () => shutdown('SIGINT'));
     process.on('SIGTERM', () => shutdown('SIGTERM'));
 
