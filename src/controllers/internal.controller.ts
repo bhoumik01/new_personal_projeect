@@ -16,7 +16,7 @@ import { telegramService } from '../services/telegram.service';
 export async function getCollectionReport(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
         const range = (req.query.range as string) || 'today';
-        
+
         // Calculate date range in IST (consistent with the bot logic)
         const now = new Date();
         const istOffset = 5.5 * 60 * 60 * 1000;
@@ -49,7 +49,7 @@ export async function getCollectionReport(req: Request, res: Response, next: Nex
         const ordersWithPayments = await prisma.order.findMany({
             where: {
                 createdAt: { gte: startDate, lt: endDate },
-                payment: {OR: [{ status: PaymentStatus.SUCCESS }]},
+                payment: { OR: [{ status: PaymentStatus.SUCCESS }] },
             },
             include: { payment: true, smmOrder: true },
         });
@@ -58,14 +58,14 @@ export async function getCollectionReport(req: Request, res: Response, next: Nex
         const botOrders = await prisma.order.findMany({
             where: {
                 createdAt: { gte: startDate, lt: endDate },
-                payment: {amount:0},
+                payment: { amount: 0 },
                 status: { in: [OrderStatus.PROCESSING, OrderStatus.COMPLETED, OrderStatus.PENDING] },
             },
-           
+
         });
-        const spent=await prisma.spend.aggregate({
-            where:{
-                createdAt:{gte:startDate,lt:endDate}
+        const spent = await prisma.spend.aggregate({
+            where: {
+                date: { gte: startDate, lt: endDate }
             },
             _sum: {
                 amount: true
@@ -347,7 +347,7 @@ export async function createAdminOrder(req: Request, res: Response, next: NextFu
         const { serviceId, link, quantity, amount, remark, customerMobile } = req.body;
 
         const provider = getProviderForService(serviceId);
-        const serviceName = `${getServiceNameForId(serviceId)}-instagram`; 
+        const serviceName = `${getServiceNameForId(serviceId)}-instagram`;
         // Append -instagram to differentiate in reports, this ensures that every admin orders goes through smm call
 
         const order = await prisma.order.create({
@@ -394,17 +394,17 @@ export async function createAdminOrder(req: Request, res: Response, next: NextFu
  */
 export async function getSpends(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-        const date=req.query.date as string | undefined;
-        const where=date?{
+        const date = req.query.date as string | undefined;
+        const where = date ? {
             date: {
                 equals: new Date(date)
             }
-        }: undefined;
+        } : undefined;
 
 
         const spends = await prisma.spend.findMany({
             where,
-            orderBy: { date: 'desc' },
+            orderBy: { createdAt: 'desc' },
             take: 50,
         });
         res.json({ success: true, message: 'Spends retrieved', data: spends });
@@ -507,7 +507,7 @@ export async function removeFailedOrderMessage(req: Request, res: Response, next
 export async function approveOrderManual(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
         const id = String(req.params.id);
-        const order = await prisma.order.findUnique({ 
+        const order = await prisma.order.findUnique({
             where: { id },
             include: { smmOrder: true }
         });
