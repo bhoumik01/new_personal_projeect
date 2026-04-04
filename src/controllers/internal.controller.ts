@@ -404,7 +404,7 @@ export async function getSpends(req: Request, res: Response, next: NextFunction)
 
         const spends = await prisma.spend.findMany({
             where,
-            orderBy: { createdAt: 'desc' },
+            orderBy: { date: 'desc' },
             take: 50,
         });
         res.json({ success: true, message: 'Spends retrieved', data: spends });
