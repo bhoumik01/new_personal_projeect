@@ -422,14 +422,15 @@ export async function createSpend(req: Request, res: Response, next: NextFunctio
 
         const now = new Date();
         let spendDate = new Date();
-
+        logger.info("Date if given", date)
         if (date) {
             const inputDate = new Date(date);
             // Use the date part from the input, but the time part from 'now'
             spendDate = new Date(inputDate);
             spendDate.setHours(now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds());
+            logger.info("inside info", spendDate);
         }
-
+        logger.info("outside info", spendDate);
         const spend = await prisma.spend.create({
             data: {
                 category,
@@ -438,6 +439,7 @@ export async function createSpend(req: Request, res: Response, next: NextFunctio
                 date: spendDate,
             },
         });
+        logger.info("Spend", JSON.stringify(spend))
         res.status(201).json({ success: true, message: 'Spend recorded', data: spend });
     } catch (error) {
         next(error);
