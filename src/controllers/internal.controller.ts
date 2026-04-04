@@ -419,12 +419,23 @@ export async function getSpends(req: Request, res: Response, next: NextFunction)
 export async function createSpend(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
         const { category, amount, note, date } = req.body;
+
+        const now = new Date();
+        let spendDate = new Date();
+
+        if (date) {
+            const inputDate = new Date(date);
+            // Use the date part from the input, but the time part from 'now'
+            spendDate = new Date(inputDate);
+            spendDate.setHours(now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds());
+        }
+
         const spend = await prisma.spend.create({
             data: {
                 category,
                 amount,
                 note,
-                date: date ? new Date(date) : new Date(),
+                date: spendDate,
             },
         });
         res.status(201).json({ success: true, message: 'Spend recorded', data: spend });
