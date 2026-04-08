@@ -59,9 +59,30 @@ async function main() {
         logger.warn('⚠️  Server will start but processing may not work until RabbitMQ is available');
     }
 
+    // 4. Memory Usage Monitor
+    const MEMORY_LOG_INTERVAL = 60 * 1000; // 1 minute
+    const HEAP_WARNING_THRESHOLD = 512 * 1024 * 1024; // 512MB
+
+    const memoryMonitor = setInterval(() => {
+        const used = process.memoryUsage();
+        const heapUsedMB = (used.heapUsed / 1024 / 1024).toFixed(2);
+        const heapTotalMB = (used.heapTotal / 1024 / 1024).toFixed(2);
+        const rssMB = (used.rss / 1024 / 1024).toFixed(2);
+
+        const logMsg = `Memory - Heap: ${heapUsedMB}MB / ${heapTotalMB}MB, RSS: ${rssMB}MB`;
+
+        if (used.heapUsed > HEAP_WARNING_THRESHOLD) {
+            logger.warn(`⚠️ High Memory Usage! ${logMsg}`);
+        } else {
+            logger.info(`📊 ${logMsg}`);
+        }
+    }, MEMORY_LOG_INTERVAL);
+    memoryMonitor.unref(); // Don't keep the process alive
+
     // Graceful shutdown
     const shutdown = async (signal: string) => {
         logger.warn(`\n[${signal}] Shutting down gracefully...`);
+        clearInterval(memoryMonitor);
 
         server.close(async () => {
             logger.info('Express server closed');

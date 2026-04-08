@@ -19,6 +19,11 @@ import { prisma } from '../../lib/initiatePrisma';
 let botWorkerInstance: Telegraf | null = null;
 
 export async function startBotWorker(): Promise<void> {
+    if (botWorkerInstance) {
+        logger.info('[BotWorker] Bot worker already initialised, skipping restart');
+        return;
+    }
+
     if (!env.ENABLE_BOT_WORKER) {
         logger.info('[BotWorker] Skipping bot worker init because ENABLE_BOT_WORKER=false');
         return;

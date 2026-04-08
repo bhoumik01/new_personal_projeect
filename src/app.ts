@@ -19,6 +19,7 @@ import offerRoutes from "./routes/offer.routes";
 import dashboardRoutes from "./routes/dashboard.routes";
 import internalRoutes from "./routes/internal.routes";
 import { ApiResponse } from "./types";
+import { requestTimer } from "./middleware/diagnostics.middleware";
 
 const app = express();
 
@@ -27,9 +28,10 @@ const app = express();
 app.set("trust proxy", 1);
 
 // ========================
-// Security Middleware
+// Security & Diagnostics
 // ========================
 app.use(helmet());
+app.use(requestTimer);
 
 // ========================
 // Cloudflare Guard — block direct Render URL access
@@ -84,7 +86,7 @@ app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 // Health Check
 // ========================
 app.get("/health", (_req, res) => {
-  console.log(`[${new Date().toISOString()}] Health check requested`);
+  const used = process.memoryUsage();
   const response: ApiResponse = {
     success: true,
     message: "Server is healthy",
@@ -92,6 +94,12 @@ app.get("/health", (_req, res) => {
       status: "ok",
       environment: process.env.NODE_ENV,
       timestamp: new Date().toISOString(),
+      memory: {
+        heapUsed: `${(used.heapUsed / 1024 / 1024).toFixed(2)} MB`,
+        heapTotal: `${(used.heapTotal / 1024 / 1024).toFixed(2)} MB`,
+        rss: `${(used.rss / 1024 / 1024).toFixed(2)} MB`,
+      },
+      uptime: `${process.uptime().toFixed(2)}s`,
     },
   };
   res.json(response);

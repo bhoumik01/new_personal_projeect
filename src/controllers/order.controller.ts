@@ -17,6 +17,20 @@ import { validateLinkForService, ServiceCategory } from '../services/instagram.v
 
 const zapupiCheckCache = new Map<string, number>();
 
+// Evict stale cache entries every 10 minutes to prevent memory leak
+setInterval(() => {
+    const now = Date.now();
+    const TTL = 10 * 60 * 1000; // 10 minutes
+    for (const [key, timestamp] of zapupiCheckCache.entries()) {
+        if (now - timestamp > TTL) {
+            zapupiCheckCache.delete(key);
+        }
+    }
+    if (zapupiCheckCache.size > 0) {
+        logger.debug(`[CacheCleanup] ZapUPI check cache cleared. Remaining: ${zapupiCheckCache.size}`);
+    }
+}, 10 * 60 * 1000).unref();
+
 const PAYMENT_TIMEOUT_MS = env.PAYMENT_TIMEOUT_MINUTES * 60 * 1000;
 
 async function expireStalePaymentsForOrder(orderId: string): Promise<void> {
