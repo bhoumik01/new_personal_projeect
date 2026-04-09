@@ -16,6 +16,10 @@ import {
     upsertFailedOrderMessage,
     removeFailedOrderMessage,
     approveOrderManual,
+    getBannersInternal,
+    createBannerInternal,
+    updateBannerInternal,
+    deleteBannerInternal,
 } from '../controllers/internal.controller';
 import { 
     getServices as getSmmServices, 
@@ -124,5 +128,13 @@ router.get('/ssm/services', getSmmServices);
  * GET /api/internal/ssm/orders/:smmOrderId/status
  */
 router.get('/ssm/orders/:smmOrderId/status', getSmmOrderStatus);
+
+/**
+ * Banner Management
+ */
+router.get('/banners', getBannersInternal);
+router.post('/banners', createBannerInternal);
+router.patch('/banners/:id', updateBannerInternal);
+router.delete('/banners/:id', deleteBannerInternal);
 
 export default router;
