@@ -582,3 +582,104 @@ export async function approveOrderManual(req: Request, res: Response, next: Next
         next(error);
     }
 }
+
+/**
+ * Banner Management (Internal API)
+ */
+const bannerSchema = z.object({
+    imageUrl: z.string().url(),
+    active: z.boolean().default(true),
+});
+
+const updateBannerSchema = bannerSchema.partial();
+
+/**
+ * GET /api/internal/banners
+ * Fetch all banners.
+ */
+export async function getBannersInternal(_req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const banners = await prisma.banner.findMany({
+            orderBy: { createdAt: 'desc' },
+        });
+
+        res.json({
+            success: true,
+            message: 'Banners retrieved',
+            data: banners,
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+/**
+ * POST /api/internal/banners
+ * Add a new banner.
+ */
+export async function createBannerInternal(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        bannerSchema.parse(req.body);
+        const data = req.body;
+        const banner = await prisma.banner.create({ data });
+
+        logger.info(`[InternalController] Created banner: ${banner.id}`);
+
+        res.status(201).json({
+            success: true,
+            message: 'Banner created successfully',
+            data: banner,
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+/**
+ * PATCH /api/internal/banners/:id
+ * Update an existing banner.
+ */
+export async function updateBannerInternal(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const id = String(req.params.id);
+        const data = updateBannerSchema.parse(req.body);
+
+        const banner = await prisma.banner.update({
+            where: { id },
+            data,
+        });
+
+        logger.info(`[InternalController] Updated banner: ${banner.id}`);
+
+        res.json({
+            success: true,
+            message: 'Banner updated successfully',
+            data: banner,
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+/**
+ * DELETE /api/internal/banners/:id
+ * Remove a banner.
+ */
+export async function deleteBannerInternal(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const id = String(req.params.id);
+
+        await prisma.banner.delete({
+            where: { id },
+        });
+
+        logger.info(`[InternalController] Deleted banner: ${id}`);
+
+        res.json({
+            success: true,
+            message: 'Banner deleted successfully',
+        });
+    } catch (error) {
+        next(error);
+    }
+}
