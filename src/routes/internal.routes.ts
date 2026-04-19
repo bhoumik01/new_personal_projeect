@@ -20,6 +20,16 @@ import {
     createBannerInternal,
     updateBannerInternal,
     deleteBannerInternal,
+    deleteSpend,
+    resetPassword,
+    getAdmins,
+    createAdmin,
+    updateAdmin,
+    deleteAdmin,
+    getSmmConfigs,
+    createSmmConfig,
+    updateSmmConfig,
+    deleteSmmConfig,
 } from '../controllers/internal.controller';
 import { 
     getServices as getSmmServices, 
@@ -97,9 +107,27 @@ router.get('/spends', getSpends);
 router.post('/spends', createSpend);
 
 /**
+ * DELETE /api/internal/spends/:id
+ */
+router.delete('/spends/:id', deleteSpend);
+
+/**
  * POST /api/internal/auth/login
  */
 router.post('/auth/login', login);
+
+/**
+ * POST /api/internal/auth/reset-password
+ */
+router.post('/auth/reset-password', resetPassword);
+
+/**
+ * Admin Management
+ */
+router.get('/admins', getAdmins);
+router.post('/admins', createAdmin);
+router.patch('/admins/:id', updateAdmin);
+router.delete('/admins/:id', deleteAdmin);
 
 /**
  * Failed Order Message Management
@@ -136,5 +164,13 @@ router.get('/banners', getBannersInternal);
 router.post('/banners', createBannerInternal);
 router.patch('/banners/:id', updateBannerInternal);
 router.delete('/banners/:id', deleteBannerInternal);
+
+/**
+ * SMM Configuration Management
+ */
+router.get('/smm-configs', getSmmConfigs);
+router.post('/smm-configs', createSmmConfig);
+router.patch('/smm-configs/:id', updateSmmConfig);
+router.delete('/smm-configs/:id', deleteSmmConfig);
 
 export default router;

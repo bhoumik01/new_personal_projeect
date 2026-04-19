@@ -206,10 +206,25 @@ exports.Prisma.SpendScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
-exports.Prisma.AdminEmailScalarFieldEnum = {
+exports.Prisma.AdminAccountScalarFieldEnum = {
   id: 'id',
   email: 'email',
-  createdAt: 'createdAt'
+  passwordHash: 'passwordHash',
+  role: 'role',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SmmConfigScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  type: 'type',
+  url: 'url',
+  apiKey: 'apiKey',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.ApprovedGroupScalarFieldEnum = {
@@ -257,7 +272,13 @@ exports.PaymentStatus = exports.$Enums.PaymentStatus = {
   PENDING: 'PENDING',
   SUCCESS: 'SUCCESS',
   FAILED: 'FAILED',
-  EXPIRED: 'EXPIRED'
+  EXPIRED: 'EXPIRED',
+  MANUAL_REVIEW: 'MANUAL_REVIEW'
+};
+
+exports.AdminRole = exports.$Enums.AdminRole = {
+  ADMIN: 'ADMIN',
+  USER: 'USER'
 };
 
 exports.Prisma.ModelName = {
@@ -268,7 +289,8 @@ exports.Prisma.ModelName = {
   Banner: 'Banner',
   SpecialOffer: 'SpecialOffer',
   Spend: 'Spend',
-  AdminEmail: 'AdminEmail',
+  AdminAccount: 'AdminAccount',
+  SmmConfig: 'SmmConfig',
   ApprovedGroup: 'ApprovedGroup',
   FailedOrderMessage: 'FailedOrderMessage'
 };

@@ -24,6 +24,7 @@ enum PaymentStatus {
   SUCCESS
   FAILED
   EXPIRED
+  MANUAL_REVIEW
 }
 
 enum SmmProvider {
@@ -141,12 +142,34 @@ model Spend {
   @@map("spends")
 }
 
-model AdminEmail {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  createdAt DateTime @default(now())
+enum AdminRole {
+  ADMIN
+  USER
+}
 
-  @@map("admin_emails")
+model AdminAccount {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String
+  role         AdminRole @default(USER)
+  name         String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@map("admin_accounts")
+}
+
+model SmmConfig {
+  id        String   @id @default(uuid())
+  name      String
+  type      String
+  url       String
+  apiKey    String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("smm_configs")
 }
 
 model ApprovedGroup {

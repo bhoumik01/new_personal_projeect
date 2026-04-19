@@ -3,7 +3,8 @@ import { z } from 'zod';
 import { prisma } from '../../lib/initiatePrisma';
 import { logger } from '../utils/logger';
 import { ApiResponse } from '../types';
-import { OrderStatus, PaymentStatus } from '../../generated/prisma/index';
+import { OrderStatus, PaymentStatus, AdminRole } from '../../generated/prisma/index';
+import bcrypt from 'bcrypt';
 import { rabbitMQService, QUEUES } from '../services/rabbitmq.service';
 import { getProviderForService, getCategoryForId, getServiceNameForId } from '../utils/smm.mapper';
 import { sseService } from '../services/sse.service';
@@ -447,16 +448,37 @@ export async function createSpend(req: Request, res: Response, next: NextFunctio
 }
 
 /**
+ * DELETE /api/internal/spends/:id
+ */
+export async function deleteSpend(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const id = String(req.params.id);
+        await prisma.spend.delete({
+            where: { id },
+        });
+
+        res.json({
+            success: true,
+            message: 'Spend record deleted successfully',
+        });
+    } catch (error) {
+        logger.error('[InternalController] Error deleting spend:', error);
+        next(error);
+    }
+}
+
+/**
  * POST /api/internal/auth/login
  */
 const loginSchema = z.object({
     email: z.string().email(),
+    password: z.string(),
 });
 
 export async function login(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-        const { email } = loginSchema.parse(req.body);
-        const admin = await prisma.adminEmail.findUnique({
+        const { email, password } = loginSchema.parse(req.body);
+        const admin = await prisma.adminAccount.findUnique({
             where: { email: email.toLowerCase() },
         });
 
@@ -465,7 +487,117 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
             return;
         }
 
-        res.json({ success: true, message: 'Login successful', data: { email: admin.email, id: admin.id } });
+        const isMatch = await bcrypt.compare(password, admin.passwordHash);
+        if (!isMatch) {
+            res.status(401).json({ success: false, message: 'Invalid credentials' });
+            return;
+        }
+
+        res.json({
+            success: true,
+            message: 'Login successful',
+            data: {
+                email: admin.email,
+                id: admin.id,
+                role: admin.role,
+                name: admin.name
+            }
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+/**
+ * POST /api/internal/auth/reset-password
+ */
+export async function resetPassword(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const { adminId, newPassword } = req.body;
+
+        const salt = await bcrypt.genSalt(10);
+        const passwordHash = await bcrypt.hash(newPassword, salt);
+
+        await prisma.adminAccount.update({
+            where: { id: adminId },
+            data: { passwordHash },
+        });
+
+        res.json({ success: true, message: 'Password reset successful' });
+    } catch (error) {
+        next(error);
+    }
+}
+
+/**
+ * GET /api/internal/admins
+ */
+export async function getAdmins(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const admins = await prisma.adminAccount.findMany({
+            orderBy: { createdAt: 'desc' }
+        });
+        res.json({ success: true, data: admins });
+    } catch (error) {
+        next(error);
+    }
+}
+
+/**
+ * POST /api/internal/admins
+ */
+export async function createAdmin(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const { email, password, role, name } = req.body;
+        const salt = await bcrypt.genSalt(10);
+        const passwordHash = await bcrypt.hash(password, salt);
+
+        const admin = await prisma.adminAccount.create({
+            data: {
+                email: email.toLowerCase(),
+                passwordHash,
+                role: role as AdminRole,
+                name,
+            },
+        });
+
+        res.status(201).json({ success: true, data: admin });
+    } catch (error) {
+        next(error);
+    }
+}
+
+/**
+ * PATCH /api/internal/admins/:id
+ */
+export async function updateAdmin(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const id = req.params.id as string;
+        const { email, role, name } = req.body;
+
+        const admin = await prisma.adminAccount.update({
+            where: { id },
+            data: {
+                email: email?.toLowerCase(),
+                role: role as AdminRole,
+                name,
+            },
+        });
+
+        res.json({ success: true, data: admin });
+    } catch (error) {
+        next(error);
+    }
+}
+
+/**
+ * DELETE /api/internal/admins/:id
+ */
+export async function deleteAdmin(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const id = req.params.id as string;
+        await prisma.adminAccount.delete({ where: { id } });
+        res.json({ success: true });
     } catch (error) {
         next(error);
     }
@@ -679,6 +811,55 @@ export async function deleteBannerInternal(req: Request, res: Response, next: Ne
             success: true,
             message: 'Banner deleted successfully',
         });
+    } catch (error) {
+        next(error);
+    }
+}
+/**
+ * SMM Config Management
+ */
+export async function getSmmConfigs(_req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const configs = await prisma.smmConfig.findMany({
+            orderBy: { createdAt: 'desc' }
+        });
+        res.json({ success: true, data: configs });
+    } catch (error) {
+        next(error);
+    }
+}
+
+export async function createSmmConfig(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const { name, type, url, apiKey, isActive } = req.body;
+        const config = await prisma.smmConfig.create({
+            data: { name, type, url, apiKey, isActive: isActive ?? true }
+        });
+        res.status(201).json({ success: true, data: config });
+    } catch (error) {
+        next(error);
+    }
+}
+
+export async function updateSmmConfig(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const id = String(req.params.id);
+        const { name, type, url, apiKey, isActive } = req.body;
+        const config = await prisma.smmConfig.update({
+            where: { id },
+            data: { name, type, url, apiKey, isActive }
+        });
+        res.json({ success: true, data: config });
+    } catch (error) {
+        next(error);
+    }
+}
+
+export async function deleteSmmConfig(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const id = String(req.params.id);
+        await prisma.smmConfig.delete({ where: { id } });
+        res.json({ success: true, message: 'SMM config deleted' });
     } catch (error) {
         next(error);
     }

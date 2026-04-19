@@ -49,10 +49,15 @@ export type SpecialOffer = $Result.DefaultSelection<Prisma.$SpecialOfferPayload>
  */
 export type Spend = $Result.DefaultSelection<Prisma.$SpendPayload>
 /**
- * Model AdminEmail
+ * Model AdminAccount
  * 
  */
-export type AdminEmail = $Result.DefaultSelection<Prisma.$AdminEmailPayload>
+export type AdminAccount = $Result.DefaultSelection<Prisma.$AdminAccountPayload>
+/**
+ * Model SmmConfig
+ * 
+ */
+export type SmmConfig = $Result.DefaultSelection<Prisma.$SmmConfigPayload>
 /**
  * Model ApprovedGroup
  * 
@@ -84,7 +89,8 @@ export const PaymentStatus: {
   PENDING: 'PENDING',
   SUCCESS: 'SUCCESS',
   FAILED: 'FAILED',
-  EXPIRED: 'EXPIRED'
+  EXPIRED: 'EXPIRED',
+  MANUAL_REVIEW: 'MANUAL_REVIEW'
 };
 
 export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
@@ -96,6 +102,14 @@ export const SmmProvider: {
 };
 
 export type SmmProvider = (typeof SmmProvider)[keyof typeof SmmProvider]
+
+
+export const AdminRole: {
+  ADMIN: 'ADMIN',
+  USER: 'USER'
+};
+
+export type AdminRole = (typeof AdminRole)[keyof typeof AdminRole]
 
 }
 
@@ -110,6 +124,10 @@ export const PaymentStatus: typeof $Enums.PaymentStatus
 export type SmmProvider = $Enums.SmmProvider
 
 export const SmmProvider: typeof $Enums.SmmProvider
+
+export type AdminRole = $Enums.AdminRole
+
+export const AdminRole: typeof $Enums.AdminRole
 
 /**
  * ##  Prisma Client ʲˢ
@@ -303,14 +321,24 @@ export class PrismaClient<
   get spend(): Prisma.SpendDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.adminEmail`: Exposes CRUD operations for the **AdminEmail** model.
+   * `prisma.adminAccount`: Exposes CRUD operations for the **AdminAccount** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more AdminEmails
-    * const adminEmails = await prisma.adminEmail.findMany()
+    * // Fetch zero or more AdminAccounts
+    * const adminAccounts = await prisma.adminAccount.findMany()
     * ```
     */
-  get adminEmail(): Prisma.AdminEmailDelegate<ExtArgs, ClientOptions>;
+  get adminAccount(): Prisma.AdminAccountDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.smmConfig`: Exposes CRUD operations for the **SmmConfig** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SmmConfigs
+    * const smmConfigs = await prisma.smmConfig.findMany()
+    * ```
+    */
+  get smmConfig(): Prisma.SmmConfigDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.approvedGroup`: Exposes CRUD operations for the **ApprovedGroup** model.
@@ -772,7 +800,8 @@ export namespace Prisma {
     Banner: 'Banner',
     SpecialOffer: 'SpecialOffer',
     Spend: 'Spend',
-    AdminEmail: 'AdminEmail',
+    AdminAccount: 'AdminAccount',
+    SmmConfig: 'SmmConfig',
     ApprovedGroup: 'ApprovedGroup',
     FailedOrderMessage: 'FailedOrderMessage'
   };
@@ -790,7 +819,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "order" | "payment" | "smmOrder" | "banner" | "specialOffer" | "spend" | "adminEmail" | "approvedGroup" | "failedOrderMessage"
+      modelProps: "user" | "order" | "payment" | "smmOrder" | "banner" | "specialOffer" | "spend" | "adminAccount" | "smmConfig" | "approvedGroup" | "failedOrderMessage"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1312,77 +1341,151 @@ export namespace Prisma {
           }
         }
       }
-      AdminEmail: {
-        payload: Prisma.$AdminEmailPayload<ExtArgs>
-        fields: Prisma.AdminEmailFieldRefs
+      AdminAccount: {
+        payload: Prisma.$AdminAccountPayload<ExtArgs>
+        fields: Prisma.AdminAccountFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.AdminEmailFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminEmailPayload> | null
+            args: Prisma.AdminAccountFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminAccountPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.AdminEmailFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminEmailPayload>
+            args: Prisma.AdminAccountFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminAccountPayload>
           }
           findFirst: {
-            args: Prisma.AdminEmailFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminEmailPayload> | null
+            args: Prisma.AdminAccountFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminAccountPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.AdminEmailFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminEmailPayload>
+            args: Prisma.AdminAccountFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminAccountPayload>
           }
           findMany: {
-            args: Prisma.AdminEmailFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminEmailPayload>[]
+            args: Prisma.AdminAccountFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminAccountPayload>[]
           }
           create: {
-            args: Prisma.AdminEmailCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminEmailPayload>
+            args: Prisma.AdminAccountCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminAccountPayload>
           }
           createMany: {
-            args: Prisma.AdminEmailCreateManyArgs<ExtArgs>
+            args: Prisma.AdminAccountCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.AdminEmailCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminEmailPayload>[]
+            args: Prisma.AdminAccountCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminAccountPayload>[]
           }
           delete: {
-            args: Prisma.AdminEmailDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminEmailPayload>
+            args: Prisma.AdminAccountDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminAccountPayload>
           }
           update: {
-            args: Prisma.AdminEmailUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminEmailPayload>
+            args: Prisma.AdminAccountUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminAccountPayload>
           }
           deleteMany: {
-            args: Prisma.AdminEmailDeleteManyArgs<ExtArgs>
+            args: Prisma.AdminAccountDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.AdminEmailUpdateManyArgs<ExtArgs>
+            args: Prisma.AdminAccountUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.AdminEmailUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminEmailPayload>[]
+            args: Prisma.AdminAccountUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminAccountPayload>[]
           }
           upsert: {
-            args: Prisma.AdminEmailUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AdminEmailPayload>
+            args: Prisma.AdminAccountUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminAccountPayload>
           }
           aggregate: {
-            args: Prisma.AdminEmailAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateAdminEmail>
+            args: Prisma.AdminAccountAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAdminAccount>
           }
           groupBy: {
-            args: Prisma.AdminEmailGroupByArgs<ExtArgs>
-            result: $Utils.Optional<AdminEmailGroupByOutputType>[]
+            args: Prisma.AdminAccountGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AdminAccountGroupByOutputType>[]
           }
           count: {
-            args: Prisma.AdminEmailCountArgs<ExtArgs>
-            result: $Utils.Optional<AdminEmailCountAggregateOutputType> | number
+            args: Prisma.AdminAccountCountArgs<ExtArgs>
+            result: $Utils.Optional<AdminAccountCountAggregateOutputType> | number
+          }
+        }
+      }
+      SmmConfig: {
+        payload: Prisma.$SmmConfigPayload<ExtArgs>
+        fields: Prisma.SmmConfigFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SmmConfigFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SmmConfigPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SmmConfigFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SmmConfigPayload>
+          }
+          findFirst: {
+            args: Prisma.SmmConfigFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SmmConfigPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SmmConfigFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SmmConfigPayload>
+          }
+          findMany: {
+            args: Prisma.SmmConfigFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SmmConfigPayload>[]
+          }
+          create: {
+            args: Prisma.SmmConfigCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SmmConfigPayload>
+          }
+          createMany: {
+            args: Prisma.SmmConfigCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SmmConfigCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SmmConfigPayload>[]
+          }
+          delete: {
+            args: Prisma.SmmConfigDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SmmConfigPayload>
+          }
+          update: {
+            args: Prisma.SmmConfigUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SmmConfigPayload>
+          }
+          deleteMany: {
+            args: Prisma.SmmConfigDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SmmConfigUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SmmConfigUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SmmConfigPayload>[]
+          }
+          upsert: {
+            args: Prisma.SmmConfigUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SmmConfigPayload>
+          }
+          aggregate: {
+            args: Prisma.SmmConfigAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSmmConfig>
+          }
+          groupBy: {
+            args: Prisma.SmmConfigGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SmmConfigGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SmmConfigCountArgs<ExtArgs>
+            result: $Utils.Optional<SmmConfigCountAggregateOutputType> | number
           }
         }
       }
@@ -1649,7 +1752,8 @@ export namespace Prisma {
     banner?: BannerOmit
     specialOffer?: SpecialOfferOmit
     spend?: SpendOmit
-    adminEmail?: AdminEmailOmit
+    adminAccount?: AdminAccountOmit
+    smmConfig?: SmmConfigOmit
     approvedGroup?: ApprovedGroupOmit
     failedOrderMessage?: FailedOrderMessageOmit
   }
@@ -9649,312 +9753,360 @@ export namespace Prisma {
 
 
   /**
-   * Model AdminEmail
+   * Model AdminAccount
    */
 
-  export type AggregateAdminEmail = {
-    _count: AdminEmailCountAggregateOutputType | null
-    _min: AdminEmailMinAggregateOutputType | null
-    _max: AdminEmailMaxAggregateOutputType | null
+  export type AggregateAdminAccount = {
+    _count: AdminAccountCountAggregateOutputType | null
+    _min: AdminAccountMinAggregateOutputType | null
+    _max: AdminAccountMaxAggregateOutputType | null
   }
 
-  export type AdminEmailMinAggregateOutputType = {
+  export type AdminAccountMinAggregateOutputType = {
     id: string | null
     email: string | null
+    passwordHash: string | null
+    role: $Enums.AdminRole | null
+    name: string | null
     createdAt: Date | null
+    updatedAt: Date | null
   }
 
-  export type AdminEmailMaxAggregateOutputType = {
+  export type AdminAccountMaxAggregateOutputType = {
     id: string | null
     email: string | null
+    passwordHash: string | null
+    role: $Enums.AdminRole | null
+    name: string | null
     createdAt: Date | null
+    updatedAt: Date | null
   }
 
-  export type AdminEmailCountAggregateOutputType = {
+  export type AdminAccountCountAggregateOutputType = {
     id: number
     email: number
+    passwordHash: number
+    role: number
+    name: number
     createdAt: number
+    updatedAt: number
     _all: number
   }
 
 
-  export type AdminEmailMinAggregateInputType = {
+  export type AdminAccountMinAggregateInputType = {
     id?: true
     email?: true
+    passwordHash?: true
+    role?: true
+    name?: true
     createdAt?: true
+    updatedAt?: true
   }
 
-  export type AdminEmailMaxAggregateInputType = {
+  export type AdminAccountMaxAggregateInputType = {
     id?: true
     email?: true
+    passwordHash?: true
+    role?: true
+    name?: true
     createdAt?: true
+    updatedAt?: true
   }
 
-  export type AdminEmailCountAggregateInputType = {
+  export type AdminAccountCountAggregateInputType = {
     id?: true
     email?: true
+    passwordHash?: true
+    role?: true
+    name?: true
     createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
-  export type AdminEmailAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AdminAccountAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which AdminEmail to aggregate.
+     * Filter which AdminAccount to aggregate.
      */
-    where?: AdminEmailWhereInput
+    where?: AdminAccountWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of AdminEmails to fetch.
+     * Determine the order of AdminAccounts to fetch.
      */
-    orderBy?: AdminEmailOrderByWithRelationInput | AdminEmailOrderByWithRelationInput[]
+    orderBy?: AdminAccountOrderByWithRelationInput | AdminAccountOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: AdminEmailWhereUniqueInput
+    cursor?: AdminAccountWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` AdminEmails from the position of the cursor.
+     * Take `±n` AdminAccounts from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` AdminEmails.
+     * Skip the first `n` AdminAccounts.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned AdminEmails
+     * Count returned AdminAccounts
     **/
-    _count?: true | AdminEmailCountAggregateInputType
+    _count?: true | AdminAccountCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: AdminEmailMinAggregateInputType
+    _min?: AdminAccountMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: AdminEmailMaxAggregateInputType
+    _max?: AdminAccountMaxAggregateInputType
   }
 
-  export type GetAdminEmailAggregateType<T extends AdminEmailAggregateArgs> = {
-        [P in keyof T & keyof AggregateAdminEmail]: P extends '_count' | 'count'
+  export type GetAdminAccountAggregateType<T extends AdminAccountAggregateArgs> = {
+        [P in keyof T & keyof AggregateAdminAccount]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateAdminEmail[P]>
-      : GetScalarType<T[P], AggregateAdminEmail[P]>
+        : GetScalarType<T[P], AggregateAdminAccount[P]>
+      : GetScalarType<T[P], AggregateAdminAccount[P]>
   }
 
 
 
 
-  export type AdminEmailGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AdminEmailWhereInput
-    orderBy?: AdminEmailOrderByWithAggregationInput | AdminEmailOrderByWithAggregationInput[]
-    by: AdminEmailScalarFieldEnum[] | AdminEmailScalarFieldEnum
-    having?: AdminEmailScalarWhereWithAggregatesInput
+  export type AdminAccountGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdminAccountWhereInput
+    orderBy?: AdminAccountOrderByWithAggregationInput | AdminAccountOrderByWithAggregationInput[]
+    by: AdminAccountScalarFieldEnum[] | AdminAccountScalarFieldEnum
+    having?: AdminAccountScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: AdminEmailCountAggregateInputType | true
-    _min?: AdminEmailMinAggregateInputType
-    _max?: AdminEmailMaxAggregateInputType
+    _count?: AdminAccountCountAggregateInputType | true
+    _min?: AdminAccountMinAggregateInputType
+    _max?: AdminAccountMaxAggregateInputType
   }
 
-  export type AdminEmailGroupByOutputType = {
+  export type AdminAccountGroupByOutputType = {
     id: string
     email: string
+    passwordHash: string
+    role: $Enums.AdminRole
+    name: string | null
     createdAt: Date
-    _count: AdminEmailCountAggregateOutputType | null
-    _min: AdminEmailMinAggregateOutputType | null
-    _max: AdminEmailMaxAggregateOutputType | null
+    updatedAt: Date
+    _count: AdminAccountCountAggregateOutputType | null
+    _min: AdminAccountMinAggregateOutputType | null
+    _max: AdminAccountMaxAggregateOutputType | null
   }
 
-  type GetAdminEmailGroupByPayload<T extends AdminEmailGroupByArgs> = Prisma.PrismaPromise<
+  type GetAdminAccountGroupByPayload<T extends AdminAccountGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<AdminEmailGroupByOutputType, T['by']> &
+      PickEnumerable<AdminAccountGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof AdminEmailGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof AdminAccountGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], AdminEmailGroupByOutputType[P]>
-            : GetScalarType<T[P], AdminEmailGroupByOutputType[P]>
+              : GetScalarType<T[P], AdminAccountGroupByOutputType[P]>
+            : GetScalarType<T[P], AdminAccountGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type AdminEmailSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type AdminAccountSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     email?: boolean
+    passwordHash?: boolean
+    role?: boolean
+    name?: boolean
     createdAt?: boolean
-  }, ExtArgs["result"]["adminEmail"]>
+    updatedAt?: boolean
+  }, ExtArgs["result"]["adminAccount"]>
 
-  export type AdminEmailSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type AdminAccountSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     email?: boolean
+    passwordHash?: boolean
+    role?: boolean
+    name?: boolean
     createdAt?: boolean
-  }, ExtArgs["result"]["adminEmail"]>
+    updatedAt?: boolean
+  }, ExtArgs["result"]["adminAccount"]>
 
-  export type AdminEmailSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type AdminAccountSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     email?: boolean
+    passwordHash?: boolean
+    role?: boolean
+    name?: boolean
     createdAt?: boolean
-  }, ExtArgs["result"]["adminEmail"]>
+    updatedAt?: boolean
+  }, ExtArgs["result"]["adminAccount"]>
 
-  export type AdminEmailSelectScalar = {
+  export type AdminAccountSelectScalar = {
     id?: boolean
     email?: boolean
+    passwordHash?: boolean
+    role?: boolean
+    name?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type AdminEmailOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "createdAt", ExtArgs["result"]["adminEmail"]>
+  export type AdminAccountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "role" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["adminAccount"]>
 
-  export type $AdminEmailPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "AdminEmail"
+  export type $AdminAccountPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AdminAccount"
     objects: {}
     scalars: $Extensions.GetPayloadResult<{
       id: string
       email: string
+      passwordHash: string
+      role: $Enums.AdminRole
+      name: string | null
       createdAt: Date
-    }, ExtArgs["result"]["adminEmail"]>
+      updatedAt: Date
+    }, ExtArgs["result"]["adminAccount"]>
     composites: {}
   }
 
-  type AdminEmailGetPayload<S extends boolean | null | undefined | AdminEmailDefaultArgs> = $Result.GetResult<Prisma.$AdminEmailPayload, S>
+  type AdminAccountGetPayload<S extends boolean | null | undefined | AdminAccountDefaultArgs> = $Result.GetResult<Prisma.$AdminAccountPayload, S>
 
-  type AdminEmailCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<AdminEmailFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: AdminEmailCountAggregateInputType | true
+  type AdminAccountCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AdminAccountFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AdminAccountCountAggregateInputType | true
     }
 
-  export interface AdminEmailDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AdminEmail'], meta: { name: 'AdminEmail' } }
+  export interface AdminAccountDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AdminAccount'], meta: { name: 'AdminAccount' } }
     /**
-     * Find zero or one AdminEmail that matches the filter.
-     * @param {AdminEmailFindUniqueArgs} args - Arguments to find a AdminEmail
+     * Find zero or one AdminAccount that matches the filter.
+     * @param {AdminAccountFindUniqueArgs} args - Arguments to find a AdminAccount
      * @example
-     * // Get one AdminEmail
-     * const adminEmail = await prisma.adminEmail.findUnique({
+     * // Get one AdminAccount
+     * const adminAccount = await prisma.adminAccount.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends AdminEmailFindUniqueArgs>(args: SelectSubset<T, AdminEmailFindUniqueArgs<ExtArgs>>): Prisma__AdminEmailClient<$Result.GetResult<Prisma.$AdminEmailPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends AdminAccountFindUniqueArgs>(args: SelectSubset<T, AdminAccountFindUniqueArgs<ExtArgs>>): Prisma__AdminAccountClient<$Result.GetResult<Prisma.$AdminAccountPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one AdminEmail that matches the filter or throw an error with `error.code='P2025'`
+     * Find one AdminAccount that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {AdminEmailFindUniqueOrThrowArgs} args - Arguments to find a AdminEmail
+     * @param {AdminAccountFindUniqueOrThrowArgs} args - Arguments to find a AdminAccount
      * @example
-     * // Get one AdminEmail
-     * const adminEmail = await prisma.adminEmail.findUniqueOrThrow({
+     * // Get one AdminAccount
+     * const adminAccount = await prisma.adminAccount.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends AdminEmailFindUniqueOrThrowArgs>(args: SelectSubset<T, AdminEmailFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AdminEmailClient<$Result.GetResult<Prisma.$AdminEmailPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends AdminAccountFindUniqueOrThrowArgs>(args: SelectSubset<T, AdminAccountFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AdminAccountClient<$Result.GetResult<Prisma.$AdminAccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first AdminEmail that matches the filter.
+     * Find the first AdminAccount that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {AdminEmailFindFirstArgs} args - Arguments to find a AdminEmail
+     * @param {AdminAccountFindFirstArgs} args - Arguments to find a AdminAccount
      * @example
-     * // Get one AdminEmail
-     * const adminEmail = await prisma.adminEmail.findFirst({
+     * // Get one AdminAccount
+     * const adminAccount = await prisma.adminAccount.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends AdminEmailFindFirstArgs>(args?: SelectSubset<T, AdminEmailFindFirstArgs<ExtArgs>>): Prisma__AdminEmailClient<$Result.GetResult<Prisma.$AdminEmailPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends AdminAccountFindFirstArgs>(args?: SelectSubset<T, AdminAccountFindFirstArgs<ExtArgs>>): Prisma__AdminAccountClient<$Result.GetResult<Prisma.$AdminAccountPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first AdminEmail that matches the filter or
+     * Find the first AdminAccount that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {AdminEmailFindFirstOrThrowArgs} args - Arguments to find a AdminEmail
+     * @param {AdminAccountFindFirstOrThrowArgs} args - Arguments to find a AdminAccount
      * @example
-     * // Get one AdminEmail
-     * const adminEmail = await prisma.adminEmail.findFirstOrThrow({
+     * // Get one AdminAccount
+     * const adminAccount = await prisma.adminAccount.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends AdminEmailFindFirstOrThrowArgs>(args?: SelectSubset<T, AdminEmailFindFirstOrThrowArgs<ExtArgs>>): Prisma__AdminEmailClient<$Result.GetResult<Prisma.$AdminEmailPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends AdminAccountFindFirstOrThrowArgs>(args?: SelectSubset<T, AdminAccountFindFirstOrThrowArgs<ExtArgs>>): Prisma__AdminAccountClient<$Result.GetResult<Prisma.$AdminAccountPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more AdminEmails that matches the filter.
+     * Find zero or more AdminAccounts that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {AdminEmailFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {AdminAccountFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all AdminEmails
-     * const adminEmails = await prisma.adminEmail.findMany()
+     * // Get all AdminAccounts
+     * const adminAccounts = await prisma.adminAccount.findMany()
      * 
-     * // Get first 10 AdminEmails
-     * const adminEmails = await prisma.adminEmail.findMany({ take: 10 })
+     * // Get first 10 AdminAccounts
+     * const adminAccounts = await prisma.adminAccount.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const adminEmailWithIdOnly = await prisma.adminEmail.findMany({ select: { id: true } })
+     * const adminAccountWithIdOnly = await prisma.adminAccount.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends AdminEmailFindManyArgs>(args?: SelectSubset<T, AdminEmailFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminEmailPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends AdminAccountFindManyArgs>(args?: SelectSubset<T, AdminAccountFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminAccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a AdminEmail.
-     * @param {AdminEmailCreateArgs} args - Arguments to create a AdminEmail.
+     * Create a AdminAccount.
+     * @param {AdminAccountCreateArgs} args - Arguments to create a AdminAccount.
      * @example
-     * // Create one AdminEmail
-     * const AdminEmail = await prisma.adminEmail.create({
+     * // Create one AdminAccount
+     * const AdminAccount = await prisma.adminAccount.create({
      *   data: {
-     *     // ... data to create a AdminEmail
+     *     // ... data to create a AdminAccount
      *   }
      * })
      * 
      */
-    create<T extends AdminEmailCreateArgs>(args: SelectSubset<T, AdminEmailCreateArgs<ExtArgs>>): Prisma__AdminEmailClient<$Result.GetResult<Prisma.$AdminEmailPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends AdminAccountCreateArgs>(args: SelectSubset<T, AdminAccountCreateArgs<ExtArgs>>): Prisma__AdminAccountClient<$Result.GetResult<Prisma.$AdminAccountPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many AdminEmails.
-     * @param {AdminEmailCreateManyArgs} args - Arguments to create many AdminEmails.
+     * Create many AdminAccounts.
+     * @param {AdminAccountCreateManyArgs} args - Arguments to create many AdminAccounts.
      * @example
-     * // Create many AdminEmails
-     * const adminEmail = await prisma.adminEmail.createMany({
+     * // Create many AdminAccounts
+     * const adminAccount = await prisma.adminAccount.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends AdminEmailCreateManyArgs>(args?: SelectSubset<T, AdminEmailCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends AdminAccountCreateManyArgs>(args?: SelectSubset<T, AdminAccountCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many AdminEmails and returns the data saved in the database.
-     * @param {AdminEmailCreateManyAndReturnArgs} args - Arguments to create many AdminEmails.
+     * Create many AdminAccounts and returns the data saved in the database.
+     * @param {AdminAccountCreateManyAndReturnArgs} args - Arguments to create many AdminAccounts.
      * @example
-     * // Create many AdminEmails
-     * const adminEmail = await prisma.adminEmail.createManyAndReturn({
+     * // Create many AdminAccounts
+     * const adminAccount = await prisma.adminAccount.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many AdminEmails and only return the `id`
-     * const adminEmailWithIdOnly = await prisma.adminEmail.createManyAndReturn({
+     * // Create many AdminAccounts and only return the `id`
+     * const adminAccountWithIdOnly = await prisma.adminAccount.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -9964,28 +10116,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends AdminEmailCreateManyAndReturnArgs>(args?: SelectSubset<T, AdminEmailCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminEmailPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends AdminAccountCreateManyAndReturnArgs>(args?: SelectSubset<T, AdminAccountCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminAccountPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a AdminEmail.
-     * @param {AdminEmailDeleteArgs} args - Arguments to delete one AdminEmail.
+     * Delete a AdminAccount.
+     * @param {AdminAccountDeleteArgs} args - Arguments to delete one AdminAccount.
      * @example
-     * // Delete one AdminEmail
-     * const AdminEmail = await prisma.adminEmail.delete({
+     * // Delete one AdminAccount
+     * const AdminAccount = await prisma.adminAccount.delete({
      *   where: {
-     *     // ... filter to delete one AdminEmail
+     *     // ... filter to delete one AdminAccount
      *   }
      * })
      * 
      */
-    delete<T extends AdminEmailDeleteArgs>(args: SelectSubset<T, AdminEmailDeleteArgs<ExtArgs>>): Prisma__AdminEmailClient<$Result.GetResult<Prisma.$AdminEmailPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends AdminAccountDeleteArgs>(args: SelectSubset<T, AdminAccountDeleteArgs<ExtArgs>>): Prisma__AdminAccountClient<$Result.GetResult<Prisma.$AdminAccountPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one AdminEmail.
-     * @param {AdminEmailUpdateArgs} args - Arguments to update one AdminEmail.
+     * Update one AdminAccount.
+     * @param {AdminAccountUpdateArgs} args - Arguments to update one AdminAccount.
      * @example
-     * // Update one AdminEmail
-     * const adminEmail = await prisma.adminEmail.update({
+     * // Update one AdminAccount
+     * const adminAccount = await prisma.adminAccount.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -9995,30 +10147,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends AdminEmailUpdateArgs>(args: SelectSubset<T, AdminEmailUpdateArgs<ExtArgs>>): Prisma__AdminEmailClient<$Result.GetResult<Prisma.$AdminEmailPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends AdminAccountUpdateArgs>(args: SelectSubset<T, AdminAccountUpdateArgs<ExtArgs>>): Prisma__AdminAccountClient<$Result.GetResult<Prisma.$AdminAccountPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more AdminEmails.
-     * @param {AdminEmailDeleteManyArgs} args - Arguments to filter AdminEmails to delete.
+     * Delete zero or more AdminAccounts.
+     * @param {AdminAccountDeleteManyArgs} args - Arguments to filter AdminAccounts to delete.
      * @example
-     * // Delete a few AdminEmails
-     * const { count } = await prisma.adminEmail.deleteMany({
+     * // Delete a few AdminAccounts
+     * const { count } = await prisma.adminAccount.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends AdminEmailDeleteManyArgs>(args?: SelectSubset<T, AdminEmailDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends AdminAccountDeleteManyArgs>(args?: SelectSubset<T, AdminAccountDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more AdminEmails.
+     * Update zero or more AdminAccounts.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {AdminEmailUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {AdminAccountUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many AdminEmails
-     * const adminEmail = await prisma.adminEmail.updateMany({
+     * // Update many AdminAccounts
+     * const adminAccount = await prisma.adminAccount.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -10028,14 +10180,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends AdminEmailUpdateManyArgs>(args: SelectSubset<T, AdminEmailUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends AdminAccountUpdateManyArgs>(args: SelectSubset<T, AdminAccountUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more AdminEmails and returns the data updated in the database.
-     * @param {AdminEmailUpdateManyAndReturnArgs} args - Arguments to update many AdminEmails.
+     * Update zero or more AdminAccounts and returns the data updated in the database.
+     * @param {AdminAccountUpdateManyAndReturnArgs} args - Arguments to update many AdminAccounts.
      * @example
-     * // Update many AdminEmails
-     * const adminEmail = await prisma.adminEmail.updateManyAndReturn({
+     * // Update many AdminAccounts
+     * const adminAccount = await prisma.adminAccount.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -10044,8 +10196,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more AdminEmails and only return the `id`
-     * const adminEmailWithIdOnly = await prisma.adminEmail.updateManyAndReturn({
+     * // Update zero or more AdminAccounts and only return the `id`
+     * const adminAccountWithIdOnly = await prisma.adminAccount.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -10058,56 +10210,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends AdminEmailUpdateManyAndReturnArgs>(args: SelectSubset<T, AdminEmailUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminEmailPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends AdminAccountUpdateManyAndReturnArgs>(args: SelectSubset<T, AdminAccountUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminAccountPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one AdminEmail.
-     * @param {AdminEmailUpsertArgs} args - Arguments to update or create a AdminEmail.
+     * Create or update one AdminAccount.
+     * @param {AdminAccountUpsertArgs} args - Arguments to update or create a AdminAccount.
      * @example
-     * // Update or create a AdminEmail
-     * const adminEmail = await prisma.adminEmail.upsert({
+     * // Update or create a AdminAccount
+     * const adminAccount = await prisma.adminAccount.upsert({
      *   create: {
-     *     // ... data to create a AdminEmail
+     *     // ... data to create a AdminAccount
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the AdminEmail we want to update
+     *     // ... the filter for the AdminAccount we want to update
      *   }
      * })
      */
-    upsert<T extends AdminEmailUpsertArgs>(args: SelectSubset<T, AdminEmailUpsertArgs<ExtArgs>>): Prisma__AdminEmailClient<$Result.GetResult<Prisma.$AdminEmailPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends AdminAccountUpsertArgs>(args: SelectSubset<T, AdminAccountUpsertArgs<ExtArgs>>): Prisma__AdminAccountClient<$Result.GetResult<Prisma.$AdminAccountPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of AdminEmails.
+     * Count the number of AdminAccounts.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {AdminEmailCountArgs} args - Arguments to filter AdminEmails to count.
+     * @param {AdminAccountCountArgs} args - Arguments to filter AdminAccounts to count.
      * @example
-     * // Count the number of AdminEmails
-     * const count = await prisma.adminEmail.count({
+     * // Count the number of AdminAccounts
+     * const count = await prisma.adminAccount.count({
      *   where: {
-     *     // ... the filter for the AdminEmails we want to count
+     *     // ... the filter for the AdminAccounts we want to count
      *   }
      * })
     **/
-    count<T extends AdminEmailCountArgs>(
-      args?: Subset<T, AdminEmailCountArgs>,
+    count<T extends AdminAccountCountArgs>(
+      args?: Subset<T, AdminAccountCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], AdminEmailCountAggregateOutputType>
+          : GetScalarType<T['select'], AdminAccountCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a AdminEmail.
+     * Allows you to perform aggregations operations on a AdminAccount.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {AdminEmailAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {AdminAccountAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -10127,13 +10279,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends AdminEmailAggregateArgs>(args: Subset<T, AdminEmailAggregateArgs>): Prisma.PrismaPromise<GetAdminEmailAggregateType<T>>
+    aggregate<T extends AdminAccountAggregateArgs>(args: Subset<T, AdminAccountAggregateArgs>): Prisma.PrismaPromise<GetAdminAccountAggregateType<T>>
 
     /**
-     * Group by AdminEmail.
+     * Group by AdminAccount.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {AdminEmailGroupByArgs} args - Group by arguments.
+     * @param {AdminAccountGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -10148,14 +10300,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends AdminEmailGroupByArgs,
+      T extends AdminAccountGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: AdminEmailGroupByArgs['orderBy'] }
-        : { orderBy?: AdminEmailGroupByArgs['orderBy'] },
+        ? { orderBy: AdminAccountGroupByArgs['orderBy'] }
+        : { orderBy?: AdminAccountGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -10204,20 +10356,20 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, AdminEmailGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAdminEmailGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, AdminAccountGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAdminAccountGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the AdminEmail model
+   * Fields of the AdminAccount model
    */
-  readonly fields: AdminEmailFieldRefs;
+  readonly fields: AdminAccountFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for AdminEmail.
+   * The delegate class that acts as a "Promise-like" for AdminAccount.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__AdminEmailClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__AdminAccountClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -10245,375 +10397,1413 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the AdminEmail model
+   * Fields of the AdminAccount model
    */
-  interface AdminEmailFieldRefs {
-    readonly id: FieldRef<"AdminEmail", 'String'>
-    readonly email: FieldRef<"AdminEmail", 'String'>
-    readonly createdAt: FieldRef<"AdminEmail", 'DateTime'>
+  interface AdminAccountFieldRefs {
+    readonly id: FieldRef<"AdminAccount", 'String'>
+    readonly email: FieldRef<"AdminAccount", 'String'>
+    readonly passwordHash: FieldRef<"AdminAccount", 'String'>
+    readonly role: FieldRef<"AdminAccount", 'AdminRole'>
+    readonly name: FieldRef<"AdminAccount", 'String'>
+    readonly createdAt: FieldRef<"AdminAccount", 'DateTime'>
+    readonly updatedAt: FieldRef<"AdminAccount", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * AdminEmail findUnique
+   * AdminAccount findUnique
    */
-  export type AdminEmailFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AdminAccountFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the AdminEmail
+     * Select specific fields to fetch from the AdminAccount
      */
-    select?: AdminEmailSelect<ExtArgs> | null
+    select?: AdminAccountSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the AdminEmail
+     * Omit specific fields from the AdminAccount
      */
-    omit?: AdminEmailOmit<ExtArgs> | null
+    omit?: AdminAccountOmit<ExtArgs> | null
     /**
-     * Filter, which AdminEmail to fetch.
+     * Filter, which AdminAccount to fetch.
      */
-    where: AdminEmailWhereUniqueInput
+    where: AdminAccountWhereUniqueInput
   }
 
   /**
-   * AdminEmail findUniqueOrThrow
+   * AdminAccount findUniqueOrThrow
    */
-  export type AdminEmailFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AdminAccountFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the AdminEmail
+     * Select specific fields to fetch from the AdminAccount
      */
-    select?: AdminEmailSelect<ExtArgs> | null
+    select?: AdminAccountSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the AdminEmail
+     * Omit specific fields from the AdminAccount
      */
-    omit?: AdminEmailOmit<ExtArgs> | null
+    omit?: AdminAccountOmit<ExtArgs> | null
     /**
-     * Filter, which AdminEmail to fetch.
+     * Filter, which AdminAccount to fetch.
      */
-    where: AdminEmailWhereUniqueInput
+    where: AdminAccountWhereUniqueInput
   }
 
   /**
-   * AdminEmail findFirst
+   * AdminAccount findFirst
    */
-  export type AdminEmailFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AdminAccountFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the AdminEmail
+     * Select specific fields to fetch from the AdminAccount
      */
-    select?: AdminEmailSelect<ExtArgs> | null
+    select?: AdminAccountSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the AdminEmail
+     * Omit specific fields from the AdminAccount
      */
-    omit?: AdminEmailOmit<ExtArgs> | null
+    omit?: AdminAccountOmit<ExtArgs> | null
     /**
-     * Filter, which AdminEmail to fetch.
+     * Filter, which AdminAccount to fetch.
      */
-    where?: AdminEmailWhereInput
+    where?: AdminAccountWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of AdminEmails to fetch.
+     * Determine the order of AdminAccounts to fetch.
      */
-    orderBy?: AdminEmailOrderByWithRelationInput | AdminEmailOrderByWithRelationInput[]
+    orderBy?: AdminAccountOrderByWithRelationInput | AdminAccountOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for AdminEmails.
+     * Sets the position for searching for AdminAccounts.
      */
-    cursor?: AdminEmailWhereUniqueInput
+    cursor?: AdminAccountWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` AdminEmails from the position of the cursor.
+     * Take `±n` AdminAccounts from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` AdminEmails.
+     * Skip the first `n` AdminAccounts.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of AdminEmails.
+     * Filter by unique combinations of AdminAccounts.
      */
-    distinct?: AdminEmailScalarFieldEnum | AdminEmailScalarFieldEnum[]
+    distinct?: AdminAccountScalarFieldEnum | AdminAccountScalarFieldEnum[]
   }
 
   /**
-   * AdminEmail findFirstOrThrow
+   * AdminAccount findFirstOrThrow
    */
-  export type AdminEmailFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AdminAccountFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the AdminEmail
+     * Select specific fields to fetch from the AdminAccount
      */
-    select?: AdminEmailSelect<ExtArgs> | null
+    select?: AdminAccountSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the AdminEmail
+     * Omit specific fields from the AdminAccount
      */
-    omit?: AdminEmailOmit<ExtArgs> | null
+    omit?: AdminAccountOmit<ExtArgs> | null
     /**
-     * Filter, which AdminEmail to fetch.
+     * Filter, which AdminAccount to fetch.
      */
-    where?: AdminEmailWhereInput
+    where?: AdminAccountWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of AdminEmails to fetch.
+     * Determine the order of AdminAccounts to fetch.
      */
-    orderBy?: AdminEmailOrderByWithRelationInput | AdminEmailOrderByWithRelationInput[]
+    orderBy?: AdminAccountOrderByWithRelationInput | AdminAccountOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for AdminEmails.
+     * Sets the position for searching for AdminAccounts.
      */
-    cursor?: AdminEmailWhereUniqueInput
+    cursor?: AdminAccountWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` AdminEmails from the position of the cursor.
+     * Take `±n` AdminAccounts from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` AdminEmails.
+     * Skip the first `n` AdminAccounts.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of AdminEmails.
+     * Filter by unique combinations of AdminAccounts.
      */
-    distinct?: AdminEmailScalarFieldEnum | AdminEmailScalarFieldEnum[]
+    distinct?: AdminAccountScalarFieldEnum | AdminAccountScalarFieldEnum[]
   }
 
   /**
-   * AdminEmail findMany
+   * AdminAccount findMany
    */
-  export type AdminEmailFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AdminAccountFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the AdminEmail
+     * Select specific fields to fetch from the AdminAccount
      */
-    select?: AdminEmailSelect<ExtArgs> | null
+    select?: AdminAccountSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the AdminEmail
+     * Omit specific fields from the AdminAccount
      */
-    omit?: AdminEmailOmit<ExtArgs> | null
+    omit?: AdminAccountOmit<ExtArgs> | null
     /**
-     * Filter, which AdminEmails to fetch.
+     * Filter, which AdminAccounts to fetch.
      */
-    where?: AdminEmailWhereInput
+    where?: AdminAccountWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of AdminEmails to fetch.
+     * Determine the order of AdminAccounts to fetch.
      */
-    orderBy?: AdminEmailOrderByWithRelationInput | AdminEmailOrderByWithRelationInput[]
+    orderBy?: AdminAccountOrderByWithRelationInput | AdminAccountOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing AdminEmails.
+     * Sets the position for listing AdminAccounts.
      */
-    cursor?: AdminEmailWhereUniqueInput
+    cursor?: AdminAccountWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` AdminEmails from the position of the cursor.
+     * Take `±n` AdminAccounts from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` AdminEmails.
+     * Skip the first `n` AdminAccounts.
      */
     skip?: number
-    distinct?: AdminEmailScalarFieldEnum | AdminEmailScalarFieldEnum[]
+    distinct?: AdminAccountScalarFieldEnum | AdminAccountScalarFieldEnum[]
   }
 
   /**
-   * AdminEmail create
+   * AdminAccount create
    */
-  export type AdminEmailCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AdminAccountCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the AdminEmail
+     * Select specific fields to fetch from the AdminAccount
      */
-    select?: AdminEmailSelect<ExtArgs> | null
+    select?: AdminAccountSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the AdminEmail
+     * Omit specific fields from the AdminAccount
      */
-    omit?: AdminEmailOmit<ExtArgs> | null
+    omit?: AdminAccountOmit<ExtArgs> | null
     /**
-     * The data needed to create a AdminEmail.
+     * The data needed to create a AdminAccount.
      */
-    data: XOR<AdminEmailCreateInput, AdminEmailUncheckedCreateInput>
+    data: XOR<AdminAccountCreateInput, AdminAccountUncheckedCreateInput>
   }
 
   /**
-   * AdminEmail createMany
+   * AdminAccount createMany
    */
-  export type AdminEmailCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AdminAccountCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many AdminEmails.
+     * The data used to create many AdminAccounts.
      */
-    data: AdminEmailCreateManyInput | AdminEmailCreateManyInput[]
+    data: AdminAccountCreateManyInput | AdminAccountCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * AdminEmail createManyAndReturn
+   * AdminAccount createManyAndReturn
    */
-  export type AdminEmailCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AdminAccountCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the AdminEmail
+     * Select specific fields to fetch from the AdminAccount
      */
-    select?: AdminEmailSelectCreateManyAndReturn<ExtArgs> | null
+    select?: AdminAccountSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the AdminEmail
+     * Omit specific fields from the AdminAccount
      */
-    omit?: AdminEmailOmit<ExtArgs> | null
+    omit?: AdminAccountOmit<ExtArgs> | null
     /**
-     * The data used to create many AdminEmails.
+     * The data used to create many AdminAccounts.
      */
-    data: AdminEmailCreateManyInput | AdminEmailCreateManyInput[]
+    data: AdminAccountCreateManyInput | AdminAccountCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * AdminEmail update
+   * AdminAccount update
    */
-  export type AdminEmailUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AdminAccountUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the AdminEmail
+     * Select specific fields to fetch from the AdminAccount
      */
-    select?: AdminEmailSelect<ExtArgs> | null
+    select?: AdminAccountSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the AdminEmail
+     * Omit specific fields from the AdminAccount
      */
-    omit?: AdminEmailOmit<ExtArgs> | null
+    omit?: AdminAccountOmit<ExtArgs> | null
     /**
-     * The data needed to update a AdminEmail.
+     * The data needed to update a AdminAccount.
      */
-    data: XOR<AdminEmailUpdateInput, AdminEmailUncheckedUpdateInput>
+    data: XOR<AdminAccountUpdateInput, AdminAccountUncheckedUpdateInput>
     /**
-     * Choose, which AdminEmail to update.
+     * Choose, which AdminAccount to update.
      */
-    where: AdminEmailWhereUniqueInput
+    where: AdminAccountWhereUniqueInput
   }
 
   /**
-   * AdminEmail updateMany
+   * AdminAccount updateMany
    */
-  export type AdminEmailUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AdminAccountUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update AdminEmails.
+     * The data used to update AdminAccounts.
      */
-    data: XOR<AdminEmailUpdateManyMutationInput, AdminEmailUncheckedUpdateManyInput>
+    data: XOR<AdminAccountUpdateManyMutationInput, AdminAccountUncheckedUpdateManyInput>
     /**
-     * Filter which AdminEmails to update
+     * Filter which AdminAccounts to update
      */
-    where?: AdminEmailWhereInput
+    where?: AdminAccountWhereInput
     /**
-     * Limit how many AdminEmails to update.
+     * Limit how many AdminAccounts to update.
      */
     limit?: number
   }
 
   /**
-   * AdminEmail updateManyAndReturn
+   * AdminAccount updateManyAndReturn
    */
-  export type AdminEmailUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AdminAccountUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the AdminEmail
+     * Select specific fields to fetch from the AdminAccount
      */
-    select?: AdminEmailSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: AdminAccountSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the AdminEmail
+     * Omit specific fields from the AdminAccount
      */
-    omit?: AdminEmailOmit<ExtArgs> | null
+    omit?: AdminAccountOmit<ExtArgs> | null
     /**
-     * The data used to update AdminEmails.
+     * The data used to update AdminAccounts.
      */
-    data: XOR<AdminEmailUpdateManyMutationInput, AdminEmailUncheckedUpdateManyInput>
+    data: XOR<AdminAccountUpdateManyMutationInput, AdminAccountUncheckedUpdateManyInput>
     /**
-     * Filter which AdminEmails to update
+     * Filter which AdminAccounts to update
      */
-    where?: AdminEmailWhereInput
+    where?: AdminAccountWhereInput
     /**
-     * Limit how many AdminEmails to update.
+     * Limit how many AdminAccounts to update.
      */
     limit?: number
   }
 
   /**
-   * AdminEmail upsert
+   * AdminAccount upsert
    */
-  export type AdminEmailUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AdminAccountUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the AdminEmail
+     * Select specific fields to fetch from the AdminAccount
      */
-    select?: AdminEmailSelect<ExtArgs> | null
+    select?: AdminAccountSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the AdminEmail
+     * Omit specific fields from the AdminAccount
      */
-    omit?: AdminEmailOmit<ExtArgs> | null
+    omit?: AdminAccountOmit<ExtArgs> | null
     /**
-     * The filter to search for the AdminEmail to update in case it exists.
+     * The filter to search for the AdminAccount to update in case it exists.
      */
-    where: AdminEmailWhereUniqueInput
+    where: AdminAccountWhereUniqueInput
     /**
-     * In case the AdminEmail found by the `where` argument doesn't exist, create a new AdminEmail with this data.
+     * In case the AdminAccount found by the `where` argument doesn't exist, create a new AdminAccount with this data.
      */
-    create: XOR<AdminEmailCreateInput, AdminEmailUncheckedCreateInput>
+    create: XOR<AdminAccountCreateInput, AdminAccountUncheckedCreateInput>
     /**
-     * In case the AdminEmail was found with the provided `where` argument, update it with this data.
+     * In case the AdminAccount was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<AdminEmailUpdateInput, AdminEmailUncheckedUpdateInput>
+    update: XOR<AdminAccountUpdateInput, AdminAccountUncheckedUpdateInput>
   }
 
   /**
-   * AdminEmail delete
+   * AdminAccount delete
    */
-  export type AdminEmailDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AdminAccountDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the AdminEmail
+     * Select specific fields to fetch from the AdminAccount
      */
-    select?: AdminEmailSelect<ExtArgs> | null
+    select?: AdminAccountSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the AdminEmail
+     * Omit specific fields from the AdminAccount
      */
-    omit?: AdminEmailOmit<ExtArgs> | null
+    omit?: AdminAccountOmit<ExtArgs> | null
     /**
-     * Filter which AdminEmail to delete.
+     * Filter which AdminAccount to delete.
      */
-    where: AdminEmailWhereUniqueInput
+    where: AdminAccountWhereUniqueInput
   }
 
   /**
-   * AdminEmail deleteMany
+   * AdminAccount deleteMany
    */
-  export type AdminEmailDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AdminAccountDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which AdminEmails to delete
+     * Filter which AdminAccounts to delete
      */
-    where?: AdminEmailWhereInput
+    where?: AdminAccountWhereInput
     /**
-     * Limit how many AdminEmails to delete.
+     * Limit how many AdminAccounts to delete.
      */
     limit?: number
   }
 
   /**
-   * AdminEmail without action
+   * AdminAccount without action
    */
-  export type AdminEmailDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type AdminAccountDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the AdminEmail
+     * Select specific fields to fetch from the AdminAccount
      */
-    select?: AdminEmailSelect<ExtArgs> | null
+    select?: AdminAccountSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the AdminEmail
+     * Omit specific fields from the AdminAccount
      */
-    omit?: AdminEmailOmit<ExtArgs> | null
+    omit?: AdminAccountOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SmmConfig
+   */
+
+  export type AggregateSmmConfig = {
+    _count: SmmConfigCountAggregateOutputType | null
+    _min: SmmConfigMinAggregateOutputType | null
+    _max: SmmConfigMaxAggregateOutputType | null
+  }
+
+  export type SmmConfigMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    type: string | null
+    url: string | null
+    apiKey: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SmmConfigMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    type: string | null
+    url: string | null
+    apiKey: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SmmConfigCountAggregateOutputType = {
+    id: number
+    name: number
+    type: number
+    url: number
+    apiKey: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SmmConfigMinAggregateInputType = {
+    id?: true
+    name?: true
+    type?: true
+    url?: true
+    apiKey?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SmmConfigMaxAggregateInputType = {
+    id?: true
+    name?: true
+    type?: true
+    url?: true
+    apiKey?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SmmConfigCountAggregateInputType = {
+    id?: true
+    name?: true
+    type?: true
+    url?: true
+    apiKey?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SmmConfigAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SmmConfig to aggregate.
+     */
+    where?: SmmConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SmmConfigs to fetch.
+     */
+    orderBy?: SmmConfigOrderByWithRelationInput | SmmConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SmmConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SmmConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SmmConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SmmConfigs
+    **/
+    _count?: true | SmmConfigCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SmmConfigMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SmmConfigMaxAggregateInputType
+  }
+
+  export type GetSmmConfigAggregateType<T extends SmmConfigAggregateArgs> = {
+        [P in keyof T & keyof AggregateSmmConfig]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSmmConfig[P]>
+      : GetScalarType<T[P], AggregateSmmConfig[P]>
+  }
+
+
+
+
+  export type SmmConfigGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SmmConfigWhereInput
+    orderBy?: SmmConfigOrderByWithAggregationInput | SmmConfigOrderByWithAggregationInput[]
+    by: SmmConfigScalarFieldEnum[] | SmmConfigScalarFieldEnum
+    having?: SmmConfigScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SmmConfigCountAggregateInputType | true
+    _min?: SmmConfigMinAggregateInputType
+    _max?: SmmConfigMaxAggregateInputType
+  }
+
+  export type SmmConfigGroupByOutputType = {
+    id: string
+    name: string
+    type: string
+    url: string
+    apiKey: string
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: SmmConfigCountAggregateOutputType | null
+    _min: SmmConfigMinAggregateOutputType | null
+    _max: SmmConfigMaxAggregateOutputType | null
+  }
+
+  type GetSmmConfigGroupByPayload<T extends SmmConfigGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SmmConfigGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SmmConfigGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SmmConfigGroupByOutputType[P]>
+            : GetScalarType<T[P], SmmConfigGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SmmConfigSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    type?: boolean
+    url?: boolean
+    apiKey?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["smmConfig"]>
+
+  export type SmmConfigSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    type?: boolean
+    url?: boolean
+    apiKey?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["smmConfig"]>
+
+  export type SmmConfigSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    type?: boolean
+    url?: boolean
+    apiKey?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["smmConfig"]>
+
+  export type SmmConfigSelectScalar = {
+    id?: boolean
+    name?: boolean
+    type?: boolean
+    url?: boolean
+    apiKey?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type SmmConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "type" | "url" | "apiKey" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["smmConfig"]>
+
+  export type $SmmConfigPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SmmConfig"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      type: string
+      url: string
+      apiKey: string
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["smmConfig"]>
+    composites: {}
+  }
+
+  type SmmConfigGetPayload<S extends boolean | null | undefined | SmmConfigDefaultArgs> = $Result.GetResult<Prisma.$SmmConfigPayload, S>
+
+  type SmmConfigCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SmmConfigFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SmmConfigCountAggregateInputType | true
+    }
+
+  export interface SmmConfigDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SmmConfig'], meta: { name: 'SmmConfig' } }
+    /**
+     * Find zero or one SmmConfig that matches the filter.
+     * @param {SmmConfigFindUniqueArgs} args - Arguments to find a SmmConfig
+     * @example
+     * // Get one SmmConfig
+     * const smmConfig = await prisma.smmConfig.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SmmConfigFindUniqueArgs>(args: SelectSubset<T, SmmConfigFindUniqueArgs<ExtArgs>>): Prisma__SmmConfigClient<$Result.GetResult<Prisma.$SmmConfigPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SmmConfig that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SmmConfigFindUniqueOrThrowArgs} args - Arguments to find a SmmConfig
+     * @example
+     * // Get one SmmConfig
+     * const smmConfig = await prisma.smmConfig.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SmmConfigFindUniqueOrThrowArgs>(args: SelectSubset<T, SmmConfigFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SmmConfigClient<$Result.GetResult<Prisma.$SmmConfigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SmmConfig that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SmmConfigFindFirstArgs} args - Arguments to find a SmmConfig
+     * @example
+     * // Get one SmmConfig
+     * const smmConfig = await prisma.smmConfig.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SmmConfigFindFirstArgs>(args?: SelectSubset<T, SmmConfigFindFirstArgs<ExtArgs>>): Prisma__SmmConfigClient<$Result.GetResult<Prisma.$SmmConfigPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SmmConfig that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SmmConfigFindFirstOrThrowArgs} args - Arguments to find a SmmConfig
+     * @example
+     * // Get one SmmConfig
+     * const smmConfig = await prisma.smmConfig.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SmmConfigFindFirstOrThrowArgs>(args?: SelectSubset<T, SmmConfigFindFirstOrThrowArgs<ExtArgs>>): Prisma__SmmConfigClient<$Result.GetResult<Prisma.$SmmConfigPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SmmConfigs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SmmConfigFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SmmConfigs
+     * const smmConfigs = await prisma.smmConfig.findMany()
+     * 
+     * // Get first 10 SmmConfigs
+     * const smmConfigs = await prisma.smmConfig.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const smmConfigWithIdOnly = await prisma.smmConfig.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SmmConfigFindManyArgs>(args?: SelectSubset<T, SmmConfigFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SmmConfigPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SmmConfig.
+     * @param {SmmConfigCreateArgs} args - Arguments to create a SmmConfig.
+     * @example
+     * // Create one SmmConfig
+     * const SmmConfig = await prisma.smmConfig.create({
+     *   data: {
+     *     // ... data to create a SmmConfig
+     *   }
+     * })
+     * 
+     */
+    create<T extends SmmConfigCreateArgs>(args: SelectSubset<T, SmmConfigCreateArgs<ExtArgs>>): Prisma__SmmConfigClient<$Result.GetResult<Prisma.$SmmConfigPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SmmConfigs.
+     * @param {SmmConfigCreateManyArgs} args - Arguments to create many SmmConfigs.
+     * @example
+     * // Create many SmmConfigs
+     * const smmConfig = await prisma.smmConfig.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SmmConfigCreateManyArgs>(args?: SelectSubset<T, SmmConfigCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SmmConfigs and returns the data saved in the database.
+     * @param {SmmConfigCreateManyAndReturnArgs} args - Arguments to create many SmmConfigs.
+     * @example
+     * // Create many SmmConfigs
+     * const smmConfig = await prisma.smmConfig.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SmmConfigs and only return the `id`
+     * const smmConfigWithIdOnly = await prisma.smmConfig.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SmmConfigCreateManyAndReturnArgs>(args?: SelectSubset<T, SmmConfigCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SmmConfigPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SmmConfig.
+     * @param {SmmConfigDeleteArgs} args - Arguments to delete one SmmConfig.
+     * @example
+     * // Delete one SmmConfig
+     * const SmmConfig = await prisma.smmConfig.delete({
+     *   where: {
+     *     // ... filter to delete one SmmConfig
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SmmConfigDeleteArgs>(args: SelectSubset<T, SmmConfigDeleteArgs<ExtArgs>>): Prisma__SmmConfigClient<$Result.GetResult<Prisma.$SmmConfigPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SmmConfig.
+     * @param {SmmConfigUpdateArgs} args - Arguments to update one SmmConfig.
+     * @example
+     * // Update one SmmConfig
+     * const smmConfig = await prisma.smmConfig.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SmmConfigUpdateArgs>(args: SelectSubset<T, SmmConfigUpdateArgs<ExtArgs>>): Prisma__SmmConfigClient<$Result.GetResult<Prisma.$SmmConfigPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SmmConfigs.
+     * @param {SmmConfigDeleteManyArgs} args - Arguments to filter SmmConfigs to delete.
+     * @example
+     * // Delete a few SmmConfigs
+     * const { count } = await prisma.smmConfig.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SmmConfigDeleteManyArgs>(args?: SelectSubset<T, SmmConfigDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SmmConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SmmConfigUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SmmConfigs
+     * const smmConfig = await prisma.smmConfig.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SmmConfigUpdateManyArgs>(args: SelectSubset<T, SmmConfigUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SmmConfigs and returns the data updated in the database.
+     * @param {SmmConfigUpdateManyAndReturnArgs} args - Arguments to update many SmmConfigs.
+     * @example
+     * // Update many SmmConfigs
+     * const smmConfig = await prisma.smmConfig.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SmmConfigs and only return the `id`
+     * const smmConfigWithIdOnly = await prisma.smmConfig.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SmmConfigUpdateManyAndReturnArgs>(args: SelectSubset<T, SmmConfigUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SmmConfigPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SmmConfig.
+     * @param {SmmConfigUpsertArgs} args - Arguments to update or create a SmmConfig.
+     * @example
+     * // Update or create a SmmConfig
+     * const smmConfig = await prisma.smmConfig.upsert({
+     *   create: {
+     *     // ... data to create a SmmConfig
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SmmConfig we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SmmConfigUpsertArgs>(args: SelectSubset<T, SmmConfigUpsertArgs<ExtArgs>>): Prisma__SmmConfigClient<$Result.GetResult<Prisma.$SmmConfigPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SmmConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SmmConfigCountArgs} args - Arguments to filter SmmConfigs to count.
+     * @example
+     * // Count the number of SmmConfigs
+     * const count = await prisma.smmConfig.count({
+     *   where: {
+     *     // ... the filter for the SmmConfigs we want to count
+     *   }
+     * })
+    **/
+    count<T extends SmmConfigCountArgs>(
+      args?: Subset<T, SmmConfigCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SmmConfigCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SmmConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SmmConfigAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SmmConfigAggregateArgs>(args: Subset<T, SmmConfigAggregateArgs>): Prisma.PrismaPromise<GetSmmConfigAggregateType<T>>
+
+    /**
+     * Group by SmmConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SmmConfigGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SmmConfigGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SmmConfigGroupByArgs['orderBy'] }
+        : { orderBy?: SmmConfigGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SmmConfigGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSmmConfigGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SmmConfig model
+   */
+  readonly fields: SmmConfigFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SmmConfig.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SmmConfigClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SmmConfig model
+   */
+  interface SmmConfigFieldRefs {
+    readonly id: FieldRef<"SmmConfig", 'String'>
+    readonly name: FieldRef<"SmmConfig", 'String'>
+    readonly type: FieldRef<"SmmConfig", 'String'>
+    readonly url: FieldRef<"SmmConfig", 'String'>
+    readonly apiKey: FieldRef<"SmmConfig", 'String'>
+    readonly isActive: FieldRef<"SmmConfig", 'Boolean'>
+    readonly createdAt: FieldRef<"SmmConfig", 'DateTime'>
+    readonly updatedAt: FieldRef<"SmmConfig", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SmmConfig findUnique
+   */
+  export type SmmConfigFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SmmConfig
+     */
+    select?: SmmConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SmmConfig
+     */
+    omit?: SmmConfigOmit<ExtArgs> | null
+    /**
+     * Filter, which SmmConfig to fetch.
+     */
+    where: SmmConfigWhereUniqueInput
+  }
+
+  /**
+   * SmmConfig findUniqueOrThrow
+   */
+  export type SmmConfigFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SmmConfig
+     */
+    select?: SmmConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SmmConfig
+     */
+    omit?: SmmConfigOmit<ExtArgs> | null
+    /**
+     * Filter, which SmmConfig to fetch.
+     */
+    where: SmmConfigWhereUniqueInput
+  }
+
+  /**
+   * SmmConfig findFirst
+   */
+  export type SmmConfigFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SmmConfig
+     */
+    select?: SmmConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SmmConfig
+     */
+    omit?: SmmConfigOmit<ExtArgs> | null
+    /**
+     * Filter, which SmmConfig to fetch.
+     */
+    where?: SmmConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SmmConfigs to fetch.
+     */
+    orderBy?: SmmConfigOrderByWithRelationInput | SmmConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SmmConfigs.
+     */
+    cursor?: SmmConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SmmConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SmmConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SmmConfigs.
+     */
+    distinct?: SmmConfigScalarFieldEnum | SmmConfigScalarFieldEnum[]
+  }
+
+  /**
+   * SmmConfig findFirstOrThrow
+   */
+  export type SmmConfigFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SmmConfig
+     */
+    select?: SmmConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SmmConfig
+     */
+    omit?: SmmConfigOmit<ExtArgs> | null
+    /**
+     * Filter, which SmmConfig to fetch.
+     */
+    where?: SmmConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SmmConfigs to fetch.
+     */
+    orderBy?: SmmConfigOrderByWithRelationInput | SmmConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SmmConfigs.
+     */
+    cursor?: SmmConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SmmConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SmmConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SmmConfigs.
+     */
+    distinct?: SmmConfigScalarFieldEnum | SmmConfigScalarFieldEnum[]
+  }
+
+  /**
+   * SmmConfig findMany
+   */
+  export type SmmConfigFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SmmConfig
+     */
+    select?: SmmConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SmmConfig
+     */
+    omit?: SmmConfigOmit<ExtArgs> | null
+    /**
+     * Filter, which SmmConfigs to fetch.
+     */
+    where?: SmmConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SmmConfigs to fetch.
+     */
+    orderBy?: SmmConfigOrderByWithRelationInput | SmmConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SmmConfigs.
+     */
+    cursor?: SmmConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SmmConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SmmConfigs.
+     */
+    skip?: number
+    distinct?: SmmConfigScalarFieldEnum | SmmConfigScalarFieldEnum[]
+  }
+
+  /**
+   * SmmConfig create
+   */
+  export type SmmConfigCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SmmConfig
+     */
+    select?: SmmConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SmmConfig
+     */
+    omit?: SmmConfigOmit<ExtArgs> | null
+    /**
+     * The data needed to create a SmmConfig.
+     */
+    data: XOR<SmmConfigCreateInput, SmmConfigUncheckedCreateInput>
+  }
+
+  /**
+   * SmmConfig createMany
+   */
+  export type SmmConfigCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SmmConfigs.
+     */
+    data: SmmConfigCreateManyInput | SmmConfigCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SmmConfig createManyAndReturn
+   */
+  export type SmmConfigCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SmmConfig
+     */
+    select?: SmmConfigSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SmmConfig
+     */
+    omit?: SmmConfigOmit<ExtArgs> | null
+    /**
+     * The data used to create many SmmConfigs.
+     */
+    data: SmmConfigCreateManyInput | SmmConfigCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SmmConfig update
+   */
+  export type SmmConfigUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SmmConfig
+     */
+    select?: SmmConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SmmConfig
+     */
+    omit?: SmmConfigOmit<ExtArgs> | null
+    /**
+     * The data needed to update a SmmConfig.
+     */
+    data: XOR<SmmConfigUpdateInput, SmmConfigUncheckedUpdateInput>
+    /**
+     * Choose, which SmmConfig to update.
+     */
+    where: SmmConfigWhereUniqueInput
+  }
+
+  /**
+   * SmmConfig updateMany
+   */
+  export type SmmConfigUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SmmConfigs.
+     */
+    data: XOR<SmmConfigUpdateManyMutationInput, SmmConfigUncheckedUpdateManyInput>
+    /**
+     * Filter which SmmConfigs to update
+     */
+    where?: SmmConfigWhereInput
+    /**
+     * Limit how many SmmConfigs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SmmConfig updateManyAndReturn
+   */
+  export type SmmConfigUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SmmConfig
+     */
+    select?: SmmConfigSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SmmConfig
+     */
+    omit?: SmmConfigOmit<ExtArgs> | null
+    /**
+     * The data used to update SmmConfigs.
+     */
+    data: XOR<SmmConfigUpdateManyMutationInput, SmmConfigUncheckedUpdateManyInput>
+    /**
+     * Filter which SmmConfigs to update
+     */
+    where?: SmmConfigWhereInput
+    /**
+     * Limit how many SmmConfigs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SmmConfig upsert
+   */
+  export type SmmConfigUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SmmConfig
+     */
+    select?: SmmConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SmmConfig
+     */
+    omit?: SmmConfigOmit<ExtArgs> | null
+    /**
+     * The filter to search for the SmmConfig to update in case it exists.
+     */
+    where: SmmConfigWhereUniqueInput
+    /**
+     * In case the SmmConfig found by the `where` argument doesn't exist, create a new SmmConfig with this data.
+     */
+    create: XOR<SmmConfigCreateInput, SmmConfigUncheckedCreateInput>
+    /**
+     * In case the SmmConfig was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SmmConfigUpdateInput, SmmConfigUncheckedUpdateInput>
+  }
+
+  /**
+   * SmmConfig delete
+   */
+  export type SmmConfigDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SmmConfig
+     */
+    select?: SmmConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SmmConfig
+     */
+    omit?: SmmConfigOmit<ExtArgs> | null
+    /**
+     * Filter which SmmConfig to delete.
+     */
+    where: SmmConfigWhereUniqueInput
+  }
+
+  /**
+   * SmmConfig deleteMany
+   */
+  export type SmmConfigDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SmmConfigs to delete
+     */
+    where?: SmmConfigWhereInput
+    /**
+     * Limit how many SmmConfigs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SmmConfig without action
+   */
+  export type SmmConfigDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SmmConfig
+     */
+    select?: SmmConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SmmConfig
+     */
+    omit?: SmmConfigOmit<ExtArgs> | null
   }
 
 
@@ -12723,13 +13913,31 @@ export namespace Prisma {
   export type SpendScalarFieldEnum = (typeof SpendScalarFieldEnum)[keyof typeof SpendScalarFieldEnum]
 
 
-  export const AdminEmailScalarFieldEnum: {
+  export const AdminAccountScalarFieldEnum: {
     id: 'id',
     email: 'email',
-    createdAt: 'createdAt'
+    passwordHash: 'passwordHash',
+    role: 'role',
+    name: 'name',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
-  export type AdminEmailScalarFieldEnum = (typeof AdminEmailScalarFieldEnum)[keyof typeof AdminEmailScalarFieldEnum]
+  export type AdminAccountScalarFieldEnum = (typeof AdminAccountScalarFieldEnum)[keyof typeof AdminAccountScalarFieldEnum]
+
+
+  export const SmmConfigScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    type: 'type',
+    url: 'url',
+    apiKey: 'apiKey',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SmmConfigScalarFieldEnum = (typeof SmmConfigScalarFieldEnum)[keyof typeof SmmConfigScalarFieldEnum]
 
 
   export const ApprovedGroupScalarFieldEnum: {
@@ -12882,6 +14090,20 @@ export namespace Prisma {
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
+   * Reference to a field of type 'AdminRole'
+   */
+  export type EnumAdminRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdminRole'>
+    
+
+
+  /**
+   * Reference to a field of type 'AdminRole[]'
+   */
+  export type ListEnumAdminRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdminRole[]'>
     
   /**
    * Deep Input Types
@@ -13430,46 +14652,133 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Spend"> | Date | string
   }
 
-  export type AdminEmailWhereInput = {
-    AND?: AdminEmailWhereInput | AdminEmailWhereInput[]
-    OR?: AdminEmailWhereInput[]
-    NOT?: AdminEmailWhereInput | AdminEmailWhereInput[]
-    id?: StringFilter<"AdminEmail"> | string
-    email?: StringFilter<"AdminEmail"> | string
-    createdAt?: DateTimeFilter<"AdminEmail"> | Date | string
+  export type AdminAccountWhereInput = {
+    AND?: AdminAccountWhereInput | AdminAccountWhereInput[]
+    OR?: AdminAccountWhereInput[]
+    NOT?: AdminAccountWhereInput | AdminAccountWhereInput[]
+    id?: StringFilter<"AdminAccount"> | string
+    email?: StringFilter<"AdminAccount"> | string
+    passwordHash?: StringFilter<"AdminAccount"> | string
+    role?: EnumAdminRoleFilter<"AdminAccount"> | $Enums.AdminRole
+    name?: StringNullableFilter<"AdminAccount"> | string | null
+    createdAt?: DateTimeFilter<"AdminAccount"> | Date | string
+    updatedAt?: DateTimeFilter<"AdminAccount"> | Date | string
   }
 
-  export type AdminEmailOrderByWithRelationInput = {
+  export type AdminAccountOrderByWithRelationInput = {
     id?: SortOrder
     email?: SortOrder
+    passwordHash?: SortOrder
+    role?: SortOrder
+    name?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
-  export type AdminEmailWhereUniqueInput = Prisma.AtLeast<{
+  export type AdminAccountWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     email?: string
-    AND?: AdminEmailWhereInput | AdminEmailWhereInput[]
-    OR?: AdminEmailWhereInput[]
-    NOT?: AdminEmailWhereInput | AdminEmailWhereInput[]
-    createdAt?: DateTimeFilter<"AdminEmail"> | Date | string
+    AND?: AdminAccountWhereInput | AdminAccountWhereInput[]
+    OR?: AdminAccountWhereInput[]
+    NOT?: AdminAccountWhereInput | AdminAccountWhereInput[]
+    passwordHash?: StringFilter<"AdminAccount"> | string
+    role?: EnumAdminRoleFilter<"AdminAccount"> | $Enums.AdminRole
+    name?: StringNullableFilter<"AdminAccount"> | string | null
+    createdAt?: DateTimeFilter<"AdminAccount"> | Date | string
+    updatedAt?: DateTimeFilter<"AdminAccount"> | Date | string
   }, "id" | "email">
 
-  export type AdminEmailOrderByWithAggregationInput = {
+  export type AdminAccountOrderByWithAggregationInput = {
     id?: SortOrder
     email?: SortOrder
+    passwordHash?: SortOrder
+    role?: SortOrder
+    name?: SortOrderInput | SortOrder
     createdAt?: SortOrder
-    _count?: AdminEmailCountOrderByAggregateInput
-    _max?: AdminEmailMaxOrderByAggregateInput
-    _min?: AdminEmailMinOrderByAggregateInput
+    updatedAt?: SortOrder
+    _count?: AdminAccountCountOrderByAggregateInput
+    _max?: AdminAccountMaxOrderByAggregateInput
+    _min?: AdminAccountMinOrderByAggregateInput
   }
 
-  export type AdminEmailScalarWhereWithAggregatesInput = {
-    AND?: AdminEmailScalarWhereWithAggregatesInput | AdminEmailScalarWhereWithAggregatesInput[]
-    OR?: AdminEmailScalarWhereWithAggregatesInput[]
-    NOT?: AdminEmailScalarWhereWithAggregatesInput | AdminEmailScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"AdminEmail"> | string
-    email?: StringWithAggregatesFilter<"AdminEmail"> | string
-    createdAt?: DateTimeWithAggregatesFilter<"AdminEmail"> | Date | string
+  export type AdminAccountScalarWhereWithAggregatesInput = {
+    AND?: AdminAccountScalarWhereWithAggregatesInput | AdminAccountScalarWhereWithAggregatesInput[]
+    OR?: AdminAccountScalarWhereWithAggregatesInput[]
+    NOT?: AdminAccountScalarWhereWithAggregatesInput | AdminAccountScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AdminAccount"> | string
+    email?: StringWithAggregatesFilter<"AdminAccount"> | string
+    passwordHash?: StringWithAggregatesFilter<"AdminAccount"> | string
+    role?: EnumAdminRoleWithAggregatesFilter<"AdminAccount"> | $Enums.AdminRole
+    name?: StringNullableWithAggregatesFilter<"AdminAccount"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"AdminAccount"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AdminAccount"> | Date | string
+  }
+
+  export type SmmConfigWhereInput = {
+    AND?: SmmConfigWhereInput | SmmConfigWhereInput[]
+    OR?: SmmConfigWhereInput[]
+    NOT?: SmmConfigWhereInput | SmmConfigWhereInput[]
+    id?: StringFilter<"SmmConfig"> | string
+    name?: StringFilter<"SmmConfig"> | string
+    type?: StringFilter<"SmmConfig"> | string
+    url?: StringFilter<"SmmConfig"> | string
+    apiKey?: StringFilter<"SmmConfig"> | string
+    isActive?: BoolFilter<"SmmConfig"> | boolean
+    createdAt?: DateTimeFilter<"SmmConfig"> | Date | string
+    updatedAt?: DateTimeFilter<"SmmConfig"> | Date | string
+  }
+
+  export type SmmConfigOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    url?: SortOrder
+    apiKey?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SmmConfigWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SmmConfigWhereInput | SmmConfigWhereInput[]
+    OR?: SmmConfigWhereInput[]
+    NOT?: SmmConfigWhereInput | SmmConfigWhereInput[]
+    name?: StringFilter<"SmmConfig"> | string
+    type?: StringFilter<"SmmConfig"> | string
+    url?: StringFilter<"SmmConfig"> | string
+    apiKey?: StringFilter<"SmmConfig"> | string
+    isActive?: BoolFilter<"SmmConfig"> | boolean
+    createdAt?: DateTimeFilter<"SmmConfig"> | Date | string
+    updatedAt?: DateTimeFilter<"SmmConfig"> | Date | string
+  }, "id">
+
+  export type SmmConfigOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    url?: SortOrder
+    apiKey?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SmmConfigCountOrderByAggregateInput
+    _max?: SmmConfigMaxOrderByAggregateInput
+    _min?: SmmConfigMinOrderByAggregateInput
+  }
+
+  export type SmmConfigScalarWhereWithAggregatesInput = {
+    AND?: SmmConfigScalarWhereWithAggregatesInput | SmmConfigScalarWhereWithAggregatesInput[]
+    OR?: SmmConfigScalarWhereWithAggregatesInput[]
+    NOT?: SmmConfigScalarWhereWithAggregatesInput | SmmConfigScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SmmConfig"> | string
+    name?: StringWithAggregatesFilter<"SmmConfig"> | string
+    type?: StringWithAggregatesFilter<"SmmConfig"> | string
+    url?: StringWithAggregatesFilter<"SmmConfig"> | string
+    apiKey?: StringWithAggregatesFilter<"SmmConfig"> | string
+    isActive?: BoolWithAggregatesFilter<"SmmConfig"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"SmmConfig"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SmmConfig"> | Date | string
   }
 
   export type ApprovedGroupWhereInput = {
@@ -14174,46 +15483,151 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AdminEmailCreateInput = {
+  export type AdminAccountCreateInput = {
     id?: string
     email: string
+    passwordHash: string
+    role?: $Enums.AdminRole
+    name?: string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type AdminEmailUncheckedCreateInput = {
+  export type AdminAccountUncheckedCreateInput = {
     id?: string
     email: string
+    passwordHash: string
+    role?: $Enums.AdminRole
+    name?: string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type AdminEmailUpdateInput = {
+  export type AdminAccountUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumAdminRoleFieldUpdateOperationsInput | $Enums.AdminRole
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AdminEmailUncheckedUpdateInput = {
+  export type AdminAccountUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumAdminRoleFieldUpdateOperationsInput | $Enums.AdminRole
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AdminEmailCreateManyInput = {
+  export type AdminAccountCreateManyInput = {
     id?: string
     email: string
+    passwordHash: string
+    role?: $Enums.AdminRole
+    name?: string | null
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type AdminEmailUpdateManyMutationInput = {
+  export type AdminAccountUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumAdminRoleFieldUpdateOperationsInput | $Enums.AdminRole
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AdminEmailUncheckedUpdateManyInput = {
+  export type AdminAccountUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumAdminRoleFieldUpdateOperationsInput | $Enums.AdminRole
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SmmConfigCreateInput = {
+    id?: string
+    name: string
+    type: string
+    url: string
+    apiKey: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SmmConfigUncheckedCreateInput = {
+    id?: string
+    name: string
+    type: string
+    url: string
+    apiKey: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SmmConfigUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    apiKey?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SmmConfigUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    apiKey?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SmmConfigCreateManyInput = {
+    id?: string
+    name: string
+    type: string
+    url: string
+    apiKey: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SmmConfigUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    apiKey?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SmmConfigUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    apiKey?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ApprovedGroupCreateInput = {
@@ -14919,22 +16333,84 @@ export namespace Prisma {
     amount?: SortOrder
   }
 
-  export type AdminEmailCountOrderByAggregateInput = {
-    id?: SortOrder
-    email?: SortOrder
-    createdAt?: SortOrder
+  export type EnumAdminRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.AdminRole | EnumAdminRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.AdminRole[] | ListEnumAdminRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AdminRole[] | ListEnumAdminRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumAdminRoleFilter<$PrismaModel> | $Enums.AdminRole
   }
 
-  export type AdminEmailMaxOrderByAggregateInput = {
+  export type AdminAccountCountOrderByAggregateInput = {
     id?: SortOrder
     email?: SortOrder
+    passwordHash?: SortOrder
+    role?: SortOrder
+    name?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
-  export type AdminEmailMinOrderByAggregateInput = {
+  export type AdminAccountMaxOrderByAggregateInput = {
     id?: SortOrder
     email?: SortOrder
+    passwordHash?: SortOrder
+    role?: SortOrder
+    name?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdminAccountMinOrderByAggregateInput = {
+    id?: SortOrder
+    email?: SortOrder
+    passwordHash?: SortOrder
+    role?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumAdminRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AdminRole | EnumAdminRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.AdminRole[] | ListEnumAdminRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AdminRole[] | ListEnumAdminRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumAdminRoleWithAggregatesFilter<$PrismaModel> | $Enums.AdminRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAdminRoleFilter<$PrismaModel>
+    _max?: NestedEnumAdminRoleFilter<$PrismaModel>
+  }
+
+  export type SmmConfigCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    url?: SortOrder
+    apiKey?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SmmConfigMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    url?: SortOrder
+    apiKey?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SmmConfigMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    url?: SortOrder
+    apiKey?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ApprovedGroupCountOrderByAggregateInput = {
@@ -15194,6 +16670,10 @@ export namespace Prisma {
     set?: boolean
   }
 
+  export type EnumAdminRoleFieldUpdateOperationsInput = {
+    set?: $Enums.AdminRole
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -15451,6 +16931,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedEnumAdminRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.AdminRole | EnumAdminRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.AdminRole[] | ListEnumAdminRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AdminRole[] | ListEnumAdminRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumAdminRoleFilter<$PrismaModel> | $Enums.AdminRole
+  }
+
+  export type NestedEnumAdminRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AdminRole | EnumAdminRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.AdminRole[] | ListEnumAdminRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AdminRole[] | ListEnumAdminRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumAdminRoleWithAggregatesFilter<$PrismaModel> | $Enums.AdminRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAdminRoleFilter<$PrismaModel>
+    _max?: NestedEnumAdminRoleFilter<$PrismaModel>
   }
 
   export type OrderCreateWithoutUserInput = {
