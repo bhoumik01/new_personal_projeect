@@ -20,6 +20,10 @@ import {
     createBannerInternal,
     updateBannerInternal,
     deleteBannerInternal,
+    getOffersInternal,
+    createOfferInternal,
+    updateOfferInternal,
+    deleteOfferInternal,
     deleteSpend,
     resetPassword,
     getAdmins,
@@ -164,6 +168,14 @@ router.get('/banners', getBannersInternal);
 router.post('/banners', createBannerInternal);
 router.patch('/banners/:id', updateBannerInternal);
 router.delete('/banners/:id', deleteBannerInternal);
+
+/**
+ * Offer Management (Internal API)
+ */
+router.get('/offers', getOffersInternal);
+router.post('/offers', createOfferInternal);
+router.patch('/offers/:id', updateOfferInternal);
+router.delete('/offers/:id', deleteOfferInternal);
 
 /**
  * SMM Configuration Management

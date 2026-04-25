@@ -468,6 +468,117 @@ export async function deleteSpend(req: Request, res: Response, next: NextFunctio
 }
 
 /**
+ * Offer Management (Internal API)
+ */
+const createOfferSchema = z.object({
+    serviceSlug: z.string().min(1),
+    title: z.string().min(1),
+    badge: z.string().default('LIVE'),
+    active: z.boolean().default(true),
+    description: z.string().optional(),
+    serviceId: z.number().int().positive().optional(),
+    quantity: z.number().int().positive().optional(),
+    price: z.number().positive().optional(),
+}).strict();
+
+const updateOfferSchema = createOfferSchema.partial();
+
+export async function getOffersInternal(_req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const offers = await prisma.specialOffer.findMany({
+            orderBy: { createdAt: 'desc' },
+        });
+
+        res.json({
+            success: true,
+            message: 'Offers retrieved',
+            data: offers,
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+export async function createOfferInternal(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const data = createOfferSchema.parse(req.body);
+
+        // If activating a new offer, deactivate the old one for this service
+        if (data.active) {
+            await prisma.specialOffer.updateMany({
+                where: { serviceSlug: data.serviceSlug, active: true },
+                data: { active: false },
+            });
+        }
+
+        const offer = await prisma.specialOffer.create({ data });
+
+        logger.info(`[InternalController] Created offer: ${offer.id}`);
+
+        res.status(201).json({
+            success: true,
+            message: 'Offer created',
+            data: offer,
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+export async function updateOfferInternal(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const id = String(req.params.id);
+        const data = updateOfferSchema.parse(req.body);
+
+        // If activating this offer, deactivate others for same service
+        if (data.active) {
+            const currentOffer = await prisma.specialOffer.findUnique({ where: { id } });
+            const slug = data.serviceSlug || currentOffer?.serviceSlug;
+            if (slug) {
+                await prisma.specialOffer.updateMany({
+                    where: { serviceSlug: slug, active: true, id: { not: id } },
+                    data: { active: false },
+                });
+            }
+        }
+
+        const offer = await prisma.specialOffer.update({
+            where: { id },
+            data,
+        });
+
+        logger.info(`[InternalController] Updated offer: ${id}`);
+
+        res.json({
+            success: true,
+            message: 'Offer updated',
+            data: offer,
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+export async function deleteOfferInternal(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const id = String(req.params.id);
+
+        await prisma.specialOffer.delete({
+            where: { id },
+        });
+
+        logger.info(`[InternalController] Deleted offer: ${id}`);
+
+        res.json({
+            success: true,
+            message: 'Offer deleted',
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+/**
  * POST /api/internal/auth/login
  */
 const loginSchema = z.object({

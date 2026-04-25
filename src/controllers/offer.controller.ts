@@ -15,6 +15,8 @@ const createOfferSchema = z.object({
     price: z.number().positive().optional(),
 }).strict();
 
+const updateOfferSchema = createOfferSchema.partial();
+
 /**
  * GET /api/offers?service=instagram
  * Returns the active offer for a service, or null.
@@ -74,7 +76,7 @@ export async function getAllOffers(_req: Request, res: Response, next: NextFunct
  */
 export async function createOffer(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-        const data = req.body;
+        const data = createOfferSchema.parse(req.body);
 
         // If activating a new offer, deactivate the old one for this service
         if (data.active) {
@@ -85,13 +87,13 @@ export async function createOffer(req: Request, res: Response, next: NextFunctio
             logger.info(`[OfferController] Deactivated previous offers for ${data.serviceSlug}`);
         }
 
-        const offer = await prisma.specialOffer.create({ data: { ...data, serviceSlug: data.serviceSlug } });
+        const offer = await prisma.specialOffer.create({ data });
 
         logger.info(`[OfferController] Created offer: ${offer.id} for ${offer.serviceSlug}`);
 
         const response: ApiResponse = {
             success: true,
-            message: 'Offer created',
+            message: 'Offer created successfully',
             data: offer,
         };
         res.status(201).json(response);
@@ -101,23 +103,61 @@ export async function createOffer(req: Request, res: Response, next: NextFunctio
 }
 
 /**
+ * PATCH /api/offers/:id
+ * Update an offer.
+ */
+export async function updateOffer(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const id = String(req.params.id);
+        const data = updateOfferSchema.parse(req.body);
+
+        // If activating this offer, deactivate others for same service
+        if (data.active) {
+            const currentOffer = await prisma.specialOffer.findUnique({ where: { id } });
+            const slug = data.serviceSlug || currentOffer?.serviceSlug;
+            if (slug) {
+                await prisma.specialOffer.updateMany({
+                    where: { serviceSlug: slug, active: true, id: { not: id } },
+                    data: { active: false },
+                });
+            }
+        }
+
+        const offer = await prisma.specialOffer.update({
+            where: { id },
+            data,
+        });
+
+        logger.info(`[OfferController] Updated offer: ${id}`);
+
+        const response: ApiResponse = {
+            success: true,
+            message: 'Offer updated successfully',
+            data: offer,
+        };
+        res.json(response);
+    } catch (error) {
+        next(error);
+    }
+}
+
+/**
  * DELETE /api/offers/:id
- * Deactivate an offer.
+ * Delete an offer.
  */
 export async function deleteOffer(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
         const id = String(req.params.id);
 
-        await prisma.specialOffer.update({
+        await prisma.specialOffer.delete({
             where: { id },
-            data: { active: false },
         });
 
-        logger.info(`[OfferController] Deactivated offer: ${id}`);
+        logger.info(`[OfferController] Deleted offer: ${id}`);
 
         const response: ApiResponse = {
             success: true,
-            message: 'Offer deactivated',
+            message: 'Offer deleted successfully',
         };
         res.json(response);
     } catch (error) {
