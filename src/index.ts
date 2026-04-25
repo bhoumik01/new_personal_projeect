@@ -1,4 +1,11 @@
 import 'dotenv/config';
+import * as HyperDX from '@hyperdx/node-opentelemetry';
+
+HyperDX.init({
+    apiKey: 'f9d25973-eb1d-4883-856d-126e29751d54',
+    service: 'fastxera-backend'
+});
+
 import app from './app';
 import { env } from './config/env';
 import { prisma } from '../lib/initiatePrisma';
@@ -100,18 +107,20 @@ async function main() {
             process.exit(1);
         }, 10000);
     };
-    const getSpends=async ()=>{
+    const getSpends = async () => {
         console.log("getSpends");
-        const spend=await prisma.spend.aggregate({
-            where:{
-                createdAt:{gte:new Date(new Date().setHours(0,0,0,0)),
-                    lt:new Date(new Date().setHours(24,0,0,0))
+        const spend = await prisma.spend.aggregate({
+            where: {
+                createdAt: {
+                    gte: new Date(new Date().setHours(0, 0, 0, 0)),
+                    lt: new Date(new Date().setHours(24, 0, 0, 0))
                 }
             },
-            _sum:{
-                amount:true
-            }        });
-            
+            _sum: {
+                amount: true
+            }
+        });
+
         return spend;
     }
     process.on('SIGINT', () => shutdown('SIGINT'));

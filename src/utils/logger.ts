@@ -1,33 +1,51 @@
-const colors = {
-    reset: '\x1b[0m',
-    red: '\x1b[31m',
-    green: '\x1b[32m',
-    yellow: '\x1b[33m',
-    blue: '\x1b[34m',
-    cyan: '\x1b[36m',
-    gray: '\x1b[90m',
-};
+import winston from 'winston';
+import * as HyperDX from '@hyperdx/node-opentelemetry';
 
-function timestamp(): string {
-    return new Date().toISOString();
-}
+/**
+ * Winston logger configuration with HyperDX transport.
+ * This sends logs to both the console and the HyperDX dashboard.
+ */
+const winstonLogger = winston.createLogger({
+    level: 'info',
+    format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.json()
+    ),
+    transports: [
+        new winston.transports.Console({
+            format: winston.format.combine(
+                winston.format.colorize(),
+                winston.format.printf(({ level, message, timestamp, ...metadata }) => {
+                    let msg = `${timestamp} [${level}]: ${message}`;
+                    if (Object.keys(metadata).length > 0) {
+                        msg += ` ${JSON.stringify(metadata)}`;
+                    }
+                    return msg;
+                })
+            )
+        }),
+        HyperDX.getWinstonTransport('info', {
+            detectResources: true,
+        }),
+    ],
+});
 
+// Maintain the same interface to keep compatibility with existing code
 export const logger = {
-    info: (message: string, ...args: unknown[]) => {
-        console.log(`${colors.cyan}[INFO]${colors.reset} ${colors.gray}${timestamp()}${colors.reset} ${message}`, ...args);
+    info: (message: string, ...args: any[]) => {
+        winstonLogger.info(message, ...args);
     },
-    success: (message: string, ...args: unknown[]) => {
-        console.log(`${colors.green}[SUCCESS]${colors.reset} ${colors.gray}${timestamp()}${colors.reset} ${message}`, ...args);
+    success: (message: string, ...args: any[]) => {
+        // Winston doesn't have a 'success' level by default, mapping to info
+        winstonLogger.info(`✅ ${message}`, ...args);
     },
-    warn: (message: string, ...args: unknown[]) => {
-        console.warn(`${colors.yellow}[WARN]${colors.reset} ${colors.gray}${timestamp()}${colors.reset} ${message}`, ...args);
+    warn: (message: string, ...args: any[]) => {
+        winstonLogger.warn(message, ...args);
     },
-    error: (message: string, ...args: unknown[]) => {
-        console.error(`${colors.red}[ERROR]${colors.reset} ${colors.gray}${timestamp()}${colors.reset} ${message}`, ...args);
+    error: (message: string, ...args: any[]) => {
+        winstonLogger.error(message, ...args);
     },
-    debug: (message: string, ...args: unknown[]) => {
-        if (process.env.NODE_ENV === 'development') {
-            console.log(`${colors.blue}[DEBUG]${colors.reset} ${colors.gray}${timestamp()}${colors.reset} ${message}`, ...args);
-        }
+    debug: (message: string, ...args: any[]) => {
+        winstonLogger.debug(message, ...args);
     },
 };

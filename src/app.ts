@@ -118,8 +118,15 @@ app.use("/api/ssm", apiRateLimiter, ssmRoutes);
 app.use("/api/banners", apiRateLimiter, bannerRoutes);
 app.use("/api/offers", apiRateLimiter, offerRoutes);
 app.use("/api/dashboard", apiRateLimiter, dashboardRoutes);
+import * as HyperDX from '@hyperdx/node-opentelemetry';
+
+// ... (existing routes follow)
+
 app.use("/api/internal", internalRoutes);
 app.get("/api/status/stream/:id", subscribeToOrderStatus);
+
+// HyperDX Express Error Handler (must be after all routes)
+HyperDX.setupExpressErrorHandler(app);
 
 // ========================
 // 404 Handler

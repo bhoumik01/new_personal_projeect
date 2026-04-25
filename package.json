@@ -15,6 +15,7 @@
     "tunnel": "lt --port 5000 --subdomain smm-zapupi"
   },
   "dependencies": {
+    "@hyperdx/node-opentelemetry": "^0.10.3",
     "@prisma/adapter-pg": "^7.4.2",
     "@prisma/client": "^7.4.2",
     "amqplib": "^0.10.4",
@@ -32,6 +33,7 @@
     "qs": "^6.15.0",
     "telegraf": "^4.16.3",
     "uuid": "^11.0.5",
+    "winston": "^3.19.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {
