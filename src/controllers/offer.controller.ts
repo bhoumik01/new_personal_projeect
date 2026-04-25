@@ -87,7 +87,18 @@ export async function createOffer(req: Request, res: Response, next: NextFunctio
             logger.info(`[OfferController] Deactivated previous offers for ${data.serviceSlug}`);
         }
 
-        const offer = await prisma.specialOffer.create({ data });
+        const offer = await prisma.specialOffer.create({
+            data: {
+                serviceSlug: data.serviceSlug,
+                title: data.title,
+                badge: data.badge,
+                active: data.active,
+                description: data.description,
+                serviceId: data.serviceId,
+                quantity: data.quantity,
+                price: data.price,
+            }
+        });
 
         logger.info(`[OfferController] Created offer: ${offer.id} for ${offer.serviceSlug}`);
 

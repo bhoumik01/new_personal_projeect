@@ -511,7 +511,18 @@ export async function createOfferInternal(req: Request, res: Response, next: Nex
             });
         }
 
-        const offer = await prisma.specialOffer.create({ data });
+        const offer = await prisma.specialOffer.create({
+            data: {
+                serviceSlug: data.serviceSlug,
+                title: data.title,
+                badge: data.badge,
+                active: data.active,
+                description: data.description,
+                serviceId: data.serviceId,
+                quantity: data.quantity,
+                price: data.price,
+            }
+        });
 
         logger.info(`[InternalController] Created offer: ${offer.id}`);
 
