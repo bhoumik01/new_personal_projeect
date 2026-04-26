@@ -153,6 +153,7 @@ model AdminAccount {
   passwordHash String
   role         AdminRole @default(USER)
   name         String?
+  isVisible    Boolean   @default(true)
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 

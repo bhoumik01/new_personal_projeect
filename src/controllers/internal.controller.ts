@@ -657,6 +657,7 @@ export async function resetPassword(req: Request, res: Response, next: NextFunct
 export async function getAdmins(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
         const admins = await prisma.adminAccount.findMany({
+            where: { isVisible: true },
             orderBy: { createdAt: 'desc' }
         });
         res.json({ success: true, data: admins });

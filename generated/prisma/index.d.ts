@@ -9768,6 +9768,7 @@ export namespace Prisma {
     passwordHash: string | null
     role: $Enums.AdminRole | null
     name: string | null
+    isVisible: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9778,6 +9779,7 @@ export namespace Prisma {
     passwordHash: string | null
     role: $Enums.AdminRole | null
     name: string | null
+    isVisible: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9788,6 +9790,7 @@ export namespace Prisma {
     passwordHash: number
     role: number
     name: number
+    isVisible: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -9800,6 +9803,7 @@ export namespace Prisma {
     passwordHash?: true
     role?: true
     name?: true
+    isVisible?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -9810,6 +9814,7 @@ export namespace Prisma {
     passwordHash?: true
     role?: true
     name?: true
+    isVisible?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -9820,6 +9825,7 @@ export namespace Prisma {
     passwordHash?: true
     role?: true
     name?: true
+    isVisible?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -9903,6 +9909,7 @@ export namespace Prisma {
     passwordHash: string
     role: $Enums.AdminRole
     name: string | null
+    isVisible: boolean
     createdAt: Date
     updatedAt: Date
     _count: AdminAccountCountAggregateOutputType | null
@@ -9930,6 +9937,7 @@ export namespace Prisma {
     passwordHash?: boolean
     role?: boolean
     name?: boolean
+    isVisible?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["adminAccount"]>
@@ -9940,6 +9948,7 @@ export namespace Prisma {
     passwordHash?: boolean
     role?: boolean
     name?: boolean
+    isVisible?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["adminAccount"]>
@@ -9950,6 +9959,7 @@ export namespace Prisma {
     passwordHash?: boolean
     role?: boolean
     name?: boolean
+    isVisible?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["adminAccount"]>
@@ -9960,11 +9970,12 @@ export namespace Prisma {
     passwordHash?: boolean
     role?: boolean
     name?: boolean
+    isVisible?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type AdminAccountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "role" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["adminAccount"]>
+  export type AdminAccountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "role" | "name" | "isVisible" | "createdAt" | "updatedAt", ExtArgs["result"]["adminAccount"]>
 
   export type $AdminAccountPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "AdminAccount"
@@ -9975,6 +9986,7 @@ export namespace Prisma {
       passwordHash: string
       role: $Enums.AdminRole
       name: string | null
+      isVisible: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["adminAccount"]>
@@ -10405,6 +10417,7 @@ export namespace Prisma {
     readonly passwordHash: FieldRef<"AdminAccount", 'String'>
     readonly role: FieldRef<"AdminAccount", 'AdminRole'>
     readonly name: FieldRef<"AdminAccount", 'String'>
+    readonly isVisible: FieldRef<"AdminAccount", 'Boolean'>
     readonly createdAt: FieldRef<"AdminAccount", 'DateTime'>
     readonly updatedAt: FieldRef<"AdminAccount", 'DateTime'>
   }
@@ -13919,6 +13932,7 @@ export namespace Prisma {
     passwordHash: 'passwordHash',
     role: 'role',
     name: 'name',
+    isVisible: 'isVisible',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -14661,6 +14675,7 @@ export namespace Prisma {
     passwordHash?: StringFilter<"AdminAccount"> | string
     role?: EnumAdminRoleFilter<"AdminAccount"> | $Enums.AdminRole
     name?: StringNullableFilter<"AdminAccount"> | string | null
+    isVisible?: BoolFilter<"AdminAccount"> | boolean
     createdAt?: DateTimeFilter<"AdminAccount"> | Date | string
     updatedAt?: DateTimeFilter<"AdminAccount"> | Date | string
   }
@@ -14671,6 +14686,7 @@ export namespace Prisma {
     passwordHash?: SortOrder
     role?: SortOrder
     name?: SortOrderInput | SortOrder
+    isVisible?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14684,6 +14700,7 @@ export namespace Prisma {
     passwordHash?: StringFilter<"AdminAccount"> | string
     role?: EnumAdminRoleFilter<"AdminAccount"> | $Enums.AdminRole
     name?: StringNullableFilter<"AdminAccount"> | string | null
+    isVisible?: BoolFilter<"AdminAccount"> | boolean
     createdAt?: DateTimeFilter<"AdminAccount"> | Date | string
     updatedAt?: DateTimeFilter<"AdminAccount"> | Date | string
   }, "id" | "email">
@@ -14694,6 +14711,7 @@ export namespace Prisma {
     passwordHash?: SortOrder
     role?: SortOrder
     name?: SortOrderInput | SortOrder
+    isVisible?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: AdminAccountCountOrderByAggregateInput
@@ -14710,6 +14728,7 @@ export namespace Prisma {
     passwordHash?: StringWithAggregatesFilter<"AdminAccount"> | string
     role?: EnumAdminRoleWithAggregatesFilter<"AdminAccount"> | $Enums.AdminRole
     name?: StringNullableWithAggregatesFilter<"AdminAccount"> | string | null
+    isVisible?: BoolWithAggregatesFilter<"AdminAccount"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"AdminAccount"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"AdminAccount"> | Date | string
   }
@@ -15489,6 +15508,7 @@ export namespace Prisma {
     passwordHash: string
     role?: $Enums.AdminRole
     name?: string | null
+    isVisible?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -15499,6 +15519,7 @@ export namespace Prisma {
     passwordHash: string
     role?: $Enums.AdminRole
     name?: string | null
+    isVisible?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -15509,6 +15530,7 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumAdminRoleFieldUpdateOperationsInput | $Enums.AdminRole
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    isVisible?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15519,6 +15541,7 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumAdminRoleFieldUpdateOperationsInput | $Enums.AdminRole
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    isVisible?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15529,6 +15552,7 @@ export namespace Prisma {
     passwordHash: string
     role?: $Enums.AdminRole
     name?: string | null
+    isVisible?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -15539,6 +15563,7 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumAdminRoleFieldUpdateOperationsInput | $Enums.AdminRole
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    isVisible?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15549,6 +15574,7 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumAdminRoleFieldUpdateOperationsInput | $Enums.AdminRole
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    isVisible?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16346,6 +16372,7 @@ export namespace Prisma {
     passwordHash?: SortOrder
     role?: SortOrder
     name?: SortOrder
+    isVisible?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -16356,6 +16383,7 @@ export namespace Prisma {
     passwordHash?: SortOrder
     role?: SortOrder
     name?: SortOrder
+    isVisible?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -16366,6 +16394,7 @@ export namespace Prisma {
     passwordHash?: SortOrder
     role?: SortOrder
     name?: SortOrder
+    isVisible?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }

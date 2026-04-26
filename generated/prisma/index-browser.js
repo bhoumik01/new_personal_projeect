@@ -212,6 +212,7 @@ exports.Prisma.AdminAccountScalarFieldEnum = {
   passwordHash: 'passwordHash',
   role: 'role',
   name: 'name',
+  isVisible: 'isVisible',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
