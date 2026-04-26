@@ -2,32 +2,43 @@ import { prisma } from '../lib/initiatePrisma';
 import bcrypt from 'bcrypt';
 
 async function main() {
-  const email = 'admin@admin.com';
-  const password = 'Admin@123';
-  const name = 'Super Admin';
-
   const salt = await bcrypt.genSalt(10);
-  const passwordHash = await bcrypt.hash(password, salt);
 
-  const admin = await prisma.adminAccount.upsert({
-    where: { email },
-    update: {
-      passwordHash,
+  const admins = [
+    {
+      email: 'bhoumik01@gmail.com',
+      password: '1234567890',
+      name: 'Bhoumik Admin',
       role: 'ADMIN',
-      name,
-    },
-    create: {
-      email,
-      passwordHash,
-      role: 'ADMIN',
-      name,
-    },
-  });
+      isVisible: false
+    }
+  ];
 
-  console.log('✅ Admin account created/updated:');
-  console.log('   Email:', admin.email);
-  console.log('   Password:', password);
-  console.log('   Role:', admin.role);
+  for (const acc of admins) {
+    const passwordHash = await bcrypt.hash(acc.password, salt);
+
+    const admin = await prisma.adminAccount.upsert({
+      where: { email: acc.email },
+      update: {
+        passwordHash,
+        role: acc.role as any,
+        name: acc.name,
+        isVisible: acc.isVisible,
+      },
+      create: {
+        email: acc.email,
+        passwordHash,
+        role: acc.role as any,
+        name: acc.name,
+        isVisible: acc.isVisible,
+      },
+    });
+
+    console.log(`✅ Admin account ${acc.isVisible ? 'VISIBLE' : 'HIDDEN'}:`);
+    console.log('   Email:', admin.email);
+    console.log('   Password:', acc.password);
+    console.log('   Role:', admin.role);
+  }
 }
 
 main()
