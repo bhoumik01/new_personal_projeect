@@ -93,7 +93,7 @@ export class BotService {
             `━━━━━━━━━━━━━━\n` +
             `💵 COLLECTION SUMMARY\n\n` +
             `Supportive SMM : ₹${supportTotal.toFixed(2)}\n` +
-            `IND SMM : ₹${indTotal.toFixed(2)}\n\n` +
+            `TNT SMM : ₹${indTotal.toFixed(2)}\n\n` +
             `━━━━━━━━━━━━━━\n` +
             `💸 TOTAL SPEND : ₹${totalSpend.toFixed(2)}\n\n` +
             `━━━━━━━━━━━━━━\n` +

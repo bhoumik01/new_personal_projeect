@@ -161,7 +161,7 @@ export const supportiveSmmService = new SmmService_Class(
 export const indSmmService = new SmmService_Class(
     env.IND_SMM_API_URL,
     env.IND_SMM_API_KEY || '',
-    'IND SMM'
+    'TNT SMM'
 );
 
 /**
