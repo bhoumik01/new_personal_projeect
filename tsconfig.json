@@ -9,12 +9,15 @@
         "esModuleInterop": true,
         "allowJs": true,
         "skipLibCheck": true,
-        "types": ["node"]
+        "types": [
+            "node"
+        ]
     },
     "include": [
         "src/**/*",
         "lib/**/*",
-        "generated/**/*"
+        "generated/**/*",
+        "data/**/*"
     ],
     "exclude": [
         "node_modules",
