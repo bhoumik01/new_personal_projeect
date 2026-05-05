@@ -27,8 +27,7 @@ interface ServiceIdsFile {
 // so admin changes take effect without restarting the server.
 // ─────────────────────────────────────────────────────────────────────────────
 
-const isDist = __dirname.includes('dist');
-const SERVICE_IDS_FILE = path.resolve(__dirname, isDist ? '../../../data/service-ids.json' : '../../data/service-ids.json');
+const SERVICE_IDS_FILE = path.resolve(process.cwd(), 'data/service-ids.json');
 
 function loadServiceEntries(): ServiceIdEntry[] {
     try {
@@ -38,10 +37,10 @@ function loadServiceEntries(): ServiceIdEntry[] {
     } catch {
         // Fallback to hardcoded entries if file is missing / corrupt
         return [
-            { id: 10183, name: 'Followers',  provider: 'IND',        category: 'followers', platform: 'instagram', allowedQuantities: [50, 100, 200] },
-            { id: 12587, name: 'Likes',      provider: 'IND',        category: 'likes',     platform: 'instagram', allowedQuantities: [1000] },
-            { id: 602,   name: 'Reel Views', provider: 'SUPPORTIVE', category: 'views',     platform: 'instagram', allowedQuantities: [5000, 10000, 25000] },
-            { id: 670,   name: 'Comments',   provider: 'SUPPORTIVE', category: 'comments',  platform: 'instagram', allowedQuantities: [100] },
+            { id: 10183, name: 'Followers', provider: 'IND', category: 'followers', platform: 'instagram', allowedQuantities: [50, 100, 200] },
+            { id: 12587, name: 'Likes', provider: 'IND', category: 'likes', platform: 'instagram', allowedQuantities: [1000] },
+            { id: 602, name: 'Reel Views', provider: 'SUPPORTIVE', category: 'views', platform: 'instagram', allowedQuantities: [5000, 10000, 25000] },
+            { id: 670, name: 'Comments', provider: 'SUPPORTIVE', category: 'comments', platform: 'instagram', allowedQuantities: [100] },
         ];
     }
 }
