@@ -995,7 +995,7 @@ export async function deleteSmmConfig(req: Request, res: Response, next: NextFun
 // File: /data/service-ids.json
 // ─────────────────────────────────────────────────────────────────────────────
 
-const SERVICE_IDS_FILE = path.resolve(__dirname, '../../data/service-ids.json');
+const SERVICE_IDS_FILE = path.resolve(process.cwd(), 'data/service-ids.json');
 
 interface ServiceIdEntry {
     id: number;
