@@ -27,7 +27,8 @@ interface ServiceIdsFile {
 // so admin changes take effect without restarting the server.
 // ─────────────────────────────────────────────────────────────────────────────
 
-const SERVICE_IDS_FILE = path.resolve(process.cwd(), 'data/service-ids.json');
+const isDist = __dirname.includes('dist');
+const SERVICE_IDS_FILE = path.resolve(__dirname, isDist ? '../../../data/service-ids.json' : '../../data/service-ids.json');
 
 function loadServiceEntries(): ServiceIdEntry[] {
     try {
