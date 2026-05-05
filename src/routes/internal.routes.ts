@@ -34,6 +34,10 @@ import {
     createSmmConfig,
     updateSmmConfig,
     deleteSmmConfig,
+    getServiceIds,
+    createServiceId,
+    updateServiceId,
+    deleteServiceId,
 } from '../controllers/internal.controller';
 import { 
     getServices as getSmmServices, 
@@ -184,5 +188,17 @@ router.get('/smm-configs', getSmmConfigs);
 router.post('/smm-configs', createSmmConfig);
 router.patch('/smm-configs/:id', updateSmmConfig);
 router.delete('/smm-configs/:id', deleteSmmConfig);
+
+/**
+ * Service IDs Management (JSON file-backed)
+ * GET    /api/internal/service-ids          – list all
+ * POST   /api/internal/service-ids          – add new entry
+ * PATCH  /api/internal/service-ids/:id      – update by numeric SMM service ID
+ * DELETE /api/internal/service-ids/:id      – remove by numeric SMM service ID
+ */
+router.get('/service-ids', getServiceIds);
+router.post('/service-ids', createServiceId);
+router.patch('/service-ids/:id', updateServiceId);
+router.delete('/service-ids/:id', deleteServiceId);
 
 export default router;

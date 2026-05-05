@@ -1,0 +1,41 @@
+{
+  "serviceIds": [
+    {
+      "id": 10183,
+      "name": "Followers",
+      "provider": "IND",
+      "category": "followers",
+      "platform": "instagram",
+      "allowedQuantities": [50, 100, 200],
+      "description": "TNT SMM - Instagram Followers"
+    },
+    {
+      "id": 12587,
+      "name": "Likes",
+      "provider": "IND",
+      "category": "likes",
+      "platform": "instagram",
+      "allowedQuantities": [1000],
+      "description": "TNT SMM - Instagram Likes"
+    },
+    {
+      "id": 602,
+      "name": "Reel Views",
+      "provider": "SUPPORTIVE",
+      "category": "views",
+      "platform": "instagram",
+      "allowedQuantities": [5000, 10000, 25000],
+      "description": "Supportive SMM - Instagram Reel Views"
+    },
+    {
+      "id": 670,
+      "name": "Comments",
+      "provider": "SUPPORTIVE",
+      "category": "comments",
+      "platform": "instagram",
+      "allowedQuantities": [100],
+      "description": "Supportive SMM - Instagram Comments"
+    }
+  ],
+  "updatedAt": "2026-05-05T16:15:00.000Z"
+}

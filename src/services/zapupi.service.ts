@@ -61,7 +61,7 @@ export class ZapUPIService {
 
                 const response = await axios.post<ZapUPICreateOrderResponse>(
                     `${this.baseUrl}/create-order`,
-                    payload,
+                    qs.stringify(payload),
                     {
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         timeout: 30000,
@@ -117,7 +117,7 @@ export class ZapUPIService {
 
                 const response = await axios.post<ZapUPIOrderStatusResponse>(
                     `${this.baseUrl}/check-order-status`,
-                    payload,
+                    qs.stringify(payload),
                     {
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         timeout: 30000,

@@ -9,6 +9,8 @@ import { rabbitMQService, QUEUES } from '../services/rabbitmq.service';
 import { getProviderForService, getCategoryForId, getServiceNameForId } from '../utils/smm.mapper';
 import { sseService } from '../services/sse.service';
 import { telegramService } from '../services/telegram.service';
+import fs from 'fs';
+import path from 'path';
 
 /**
  * GET /api/internal/reports/collection
@@ -987,3 +989,188 @@ export async function deleteSmmConfig(req: Request, res: Response, next: NextFun
         next(error);
     }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Service IDs JSON CRUD
+// File: /data/service-ids.json
+// ─────────────────────────────────────────────────────────────────────────────
+
+const SERVICE_IDS_FILE = path.resolve(__dirname, '../../data/service-ids.json');
+
+interface ServiceIdEntry {
+    id: number;
+    name: string;
+    provider: string;
+    category: string;
+    platform: string;
+    allowedQuantities: number[];
+    description?: string;
+}
+
+interface ServiceIdsFile {
+    serviceIds: ServiceIdEntry[];
+    updatedAt: string;
+}
+
+function readServiceIdsFile(): ServiceIdsFile {
+    const raw = fs.readFileSync(SERVICE_IDS_FILE, 'utf-8');
+    return JSON.parse(raw) as ServiceIdsFile;
+}
+
+function writeServiceIdsFile(data: ServiceIdsFile): void {
+    data.updatedAt = new Date().toISOString();
+    fs.writeFileSync(SERVICE_IDS_FILE, JSON.stringify(data, null, 2), 'utf-8');
+}
+
+const serviceIdEntrySchema = z.object({
+    id: z.number().int().positive(),
+    name: z.string().min(1),
+    provider: z.string().min(1),
+    category: z.string().min(1),
+    platform: z.string().min(1),
+    allowedQuantities: z.array(z.number().int().positive()).min(1),
+    description: z.string().optional(),
+});
+
+/**
+ * GET /api/internal/service-ids
+ * Returns the full list of tracked service IDs from the JSON file.
+ */
+export async function getServiceIds(_req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const data = readServiceIdsFile();
+        res.json({
+            success: true,
+            message: 'Service IDs retrieved',
+            data: data.serviceIds,
+            updatedAt: data.updatedAt,
+        });
+    } catch (error) {
+        logger.error('[InternalController] Error reading service-ids.json:', error);
+        next(error);
+    }
+}
+
+/**
+ * GET /api/service-ids/map
+ * Returns a simple mapping of category -> id (e.g. { "followers": 10183, "likes": 12587 })
+ * used by SocialBoost frontend for quick lookups.
+ */
+export async function getServiceIdMap(_req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const data = readServiceIdsFile();
+        const map: Record<string, number> = {};
+
+        // Build category → id map
+        // 1. First pass: platform-scoped keys (e.g. "instagram_followers", "youtube_views")
+        for (const entry of data.serviceIds) {
+            map[`${entry.platform}_${entry.category}`] = entry.id;
+        }
+
+        // 2. Second pass: primary keys (unscoped) for Instagram (the main platform)
+        for (const entry of data.serviceIds) {
+            if (entry.platform === 'instagram') {
+                map[entry.category] = entry.id;
+            }
+        }
+
+        res.json({
+            success: true,
+            message: 'Service ID map built',
+            data: map,
+        });
+    } catch (error) {
+        logger.error('[InternalController] Error building service-id map:', error);
+        next(error);
+    }
+}
+
+/**
+ * POST /api/internal/service-ids
+ * Add a new service ID entry to the JSON file.
+ */
+export async function createServiceId(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const entry = serviceIdEntrySchema.parse(req.body);
+        const data = readServiceIdsFile();
+
+        const exists = data.serviceIds.some((s) => s.id === entry.id);
+        if (exists) {
+            res.status(409).json({ success: false, message: `Service ID ${entry.id} already exists` });
+            return;
+        }
+
+        data.serviceIds.push(entry as ServiceIdEntry);
+        writeServiceIdsFile(data);
+
+        logger.info(`[InternalController] Added service ID: ${entry.id}`);
+        res.status(201).json({ success: true, message: 'Service ID added', data: entry });
+    } catch (error) {
+        logger.error('[InternalController] Error creating service ID:', error);
+        next(error);
+    }
+}
+
+/**
+ * PATCH /api/internal/service-ids/:id
+ * Update an existing service ID entry by numeric ID.
+ */
+export async function updateServiceId(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const numericId = parseInt(String(req.params.id), 10);
+        if (isNaN(numericId)) {
+            res.status(400).json({ success: false, message: 'Invalid service ID' });
+            return;
+        }
+
+        const updates = serviceIdEntrySchema.partial().parse(req.body);
+        const data = readServiceIdsFile();
+
+        const index = data.serviceIds.findIndex((s) => s.id === numericId);
+        if (index === -1) {
+            res.status(404).json({ success: false, message: `Service ID ${numericId} not found` });
+            return;
+        }
+
+        data.serviceIds[index] = { ...data.serviceIds[index], ...updates };
+        writeServiceIdsFile(data);
+
+        logger.info(`[InternalController] Updated service ID: ${numericId}`);
+        res.json({ success: true, message: 'Service ID updated', data: data.serviceIds[index] });
+    } catch (error) {
+        logger.error('[InternalController] Error updating service ID:', error);
+        next(error);
+    }
+}
+
+/**
+ * DELETE /api/internal/service-ids/:id
+ * Remove a service ID entry by numeric ID.
+ */
+export async function deleteServiceId(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const numericId = parseInt(String(req.params.id), 10);
+        if (isNaN(numericId)) {
+            res.status(400).json({ success: false, message: 'Invalid service ID' });
+            return;
+        }
+
+        const data = readServiceIdsFile();
+        const before = data.serviceIds.length;
+        data.serviceIds = data.serviceIds.filter((s) => s.id !== numericId);
+
+        if (data.serviceIds.length === before) {
+            res.status(404).json({ success: false, message: `Service ID ${numericId} not found` });
+            return;
+        }
+
+        writeServiceIdsFile(data);
+
+        logger.info(`[InternalController] Deleted service ID: ${numericId}`);
+        res.json({ success: true, message: `Service ID ${numericId} deleted` });
+    } catch (error) {
+        logger.error('[InternalController] Error deleting service ID:', error);
+        next(error);
+    }
+}
+

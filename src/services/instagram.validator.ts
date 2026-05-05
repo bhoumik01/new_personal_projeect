@@ -9,7 +9,16 @@ export type InstagramLinkType = 'profile' | 'post' | 'reel' | 'unknown';
 /**
  * Allowed service categories per link type
  */
-export type ServiceCategory = 'followers' | 'likes' | 'comments' | 'views';
+export type ServiceCategory =
+    | 'followers'
+    | 'likes'
+    | 'comments'
+    | 'views'
+    | 'subscribers'
+    | 'watchtime'
+    | 'members'
+    | 'reactions'
+    | 'story_views';
 
 const LINK_TYPE_ALLOWED_SERVICES: Record<InstagramLinkType, ServiceCategory[]> = {
     profile: ['followers'],

@@ -72,9 +72,7 @@ export const createOrderSchema = z.object({
     link: z.string().optional().default(''),
     quantity: z.number().int().min(1, 'quantity must be at least 1'),
     amount: z.number().positive('amount must be positive'),
-    serviceCategory: z.enum(['followers', 'likes', 'comments', 'views'], {
-        errorMap: () => ({ message: 'serviceCategory must be one of: followers, likes, comments, views' }),
-    }),
+    serviceCategory: z.string().min(1),
     customerMobile: z.string().regex(/^[6-9]\d{9}$/, 'Invalid Indian mobile number').optional(),
     remark: z.string().max(200).optional(),
     userId: z.string().uuid().optional(),
@@ -83,9 +81,7 @@ export const createOrderSchema = z.object({
 
 export const validateLinkSchema = z.object({
     link: z.string().optional().default(''),
-    serviceCategory: z.enum(['followers', 'likes', 'comments', 'views'], {
-        errorMap: () => ({ message: 'serviceCategory must be one of: followers, likes, comments, views' }),
-    }),
+    serviceCategory: z.string().min(1),
 });
 
 // ===================== Controllers =====================

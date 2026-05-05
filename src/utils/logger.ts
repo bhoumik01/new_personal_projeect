@@ -1,5 +1,6 @@
 import winston from 'winston';
 import * as HyperDX from '@hyperdx/node-opentelemetry';
+import util from 'util';
 
 /**
  * Winston logger configuration with HyperDX transport.
@@ -18,7 +19,7 @@ const winstonLogger = winston.createLogger({
                 winston.format.printf(({ level, message, timestamp, ...metadata }) => {
                     let msg = `${timestamp} [${level}]: ${message}`;
                     if (Object.keys(metadata).length > 0) {
-                        msg += ` ${JSON.stringify(metadata)}`;
+                        msg += ` ${util.inspect(metadata, { depth: 2, colors: false, breakLength: Infinity })}`;
                     }
                     return msg;
                 })

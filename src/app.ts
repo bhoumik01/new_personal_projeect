@@ -18,6 +18,7 @@ import bannerRoutes from "./routes/banner.routes";
 import offerRoutes from "./routes/offer.routes";
 import dashboardRoutes from "./routes/dashboard.routes";
 import internalRoutes from "./routes/internal.routes";
+import serviceIdsRoutes from "./routes/service-ids.routes";
 import { ApiResponse } from "./types";
 import { requestTimer } from "./middleware/diagnostics.middleware";
 
@@ -118,6 +119,7 @@ app.use("/api/ssm", apiRateLimiter, ssmRoutes);
 app.use("/api/banners", apiRateLimiter, bannerRoutes);
 app.use("/api/offers", apiRateLimiter, offerRoutes);
 app.use("/api/dashboard", apiRateLimiter, dashboardRoutes);
+app.use("/api/service-ids", serviceIdsRoutes);
 import * as HyperDX from '@hyperdx/node-opentelemetry';
 
 // ... (existing routes follow)
