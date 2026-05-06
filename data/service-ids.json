@@ -7,7 +7,8 @@
       "category": "followers",
       "platform": "instagram",
       "allowedQuantities": [50, 100, 200],
-      "description": "TNT SMM - Instagram Followers"
+      "description": "TNT SMM - Instagram Followers",
+      "linkTypes": ["profile"]
     },
     {
       "id": 12587,
@@ -16,7 +17,8 @@
       "category": "likes",
       "platform": "instagram",
       "allowedQuantities": [1000],
-      "description": "TNT SMM - Instagram Likes"
+      "description": "TNT SMM - Instagram Likes",
+      "linkTypes": ["post", "reel"]
     },
     {
       "id": 602,
@@ -25,7 +27,8 @@
       "category": "views",
       "platform": "instagram",
       "allowedQuantities": [5000, 10000, 25000],
-      "description": "Supportive SMM - Instagram Reel Views"
+      "description": "Supportive SMM - Instagram Reel Views",
+      "linkTypes": ["reel"]
     },
     {
       "id": 670,
@@ -34,7 +37,8 @@
       "category": "comments",
       "platform": "instagram",
       "allowedQuantities": [100],
-      "description": "Supportive SMM - Instagram Comments"
+      "description": "Supportive SMM - Instagram Comments",
+      "linkTypes": ["post", "reel"]
     }
   ],
   "updatedAt": "2026-05-05T16:15:00.000Z"

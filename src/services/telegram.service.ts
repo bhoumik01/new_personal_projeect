@@ -249,9 +249,13 @@ class TelegramService {
 
                 // Persist the messageId -> orderId mapping so the bot backend can find it
                 try {
-                    await prisma.failedOrderMessage.create({
-                        data: {
+                    await prisma.failedOrderMessage.upsert({
+                        where: { messageId: sentMsg.message_id },
+                        create: {
                             messageId: sentMsg.message_id,
+                            orderId: params.orderId,
+                        },
+                        update: {
                             orderId: params.orderId,
                         }
                     });

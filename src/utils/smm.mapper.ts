@@ -36,6 +36,7 @@ function loadServiceEntries(): ServiceIdEntry[] {
         return parsed.serviceIds ?? [];
     } catch {
         // Fallback to hardcoded entries if file is missing / corrupt
+        console.log("Going to the fall back")
         return [
             { id: 10183, name: 'Followers', provider: 'IND', category: 'followers', platform: 'instagram', allowedQuantities: [50, 100, 200] },
             { id: 12587, name: 'Likes', provider: 'IND', category: 'likes', platform: 'instagram', allowedQuantities: [1000] },

@@ -995,8 +995,7 @@ export async function deleteSmmConfig(req: Request, res: Response, next: NextFun
 // File: /data/service-ids.json
 // ─────────────────────────────────────────────────────────────────────────────
 
-const isDist = __dirname.includes('dist');
-const SERVICE_IDS_FILE = path.resolve(__dirname, isDist ? '../../../data/service-ids.json' : '../../data/service-ids.json');
+const SERVICE_IDS_FILE = path.resolve(process.cwd(), 'data/service-ids.json');
 
 interface ServiceIdEntry {
     id: number;
@@ -1006,6 +1005,7 @@ interface ServiceIdEntry {
     platform: string;
     allowedQuantities: number[];
     description?: string;
+    linkTypes?: string[];
 }
 
 interface ServiceIdsFile {
@@ -1031,6 +1031,7 @@ const serviceIdEntrySchema = z.object({
     platform: z.string().min(1),
     allowedQuantities: z.array(z.number().int().positive()).min(1),
     description: z.string().optional(),
+    linkTypes: z.array(z.string()).optional(),
 });
 
 /**
